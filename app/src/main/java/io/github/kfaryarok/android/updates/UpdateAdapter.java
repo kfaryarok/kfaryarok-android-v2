@@ -1,0 +1,144 @@
+/*
+ * This file is part of kfaryarok-android.
+ *
+ * kfaryarok-android is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * kfaryarok-android is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with kfaryarok-android.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package io.github.kfaryarok.android.updates;
+
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.github.kfaryarok.android.R;
+import io.github.kfaryarok.android.updates.api.ClassesAffected;
+import io.github.kfaryarok.android.updates.api.Update;
+import io.github.kfaryarok.android.util.PreferenceUtil;
+
+/**
+ * Update adapter for creating cards to display in the recycler view.
+ *
+ * @author tbsc on 03/03/2017 (copied from v1)
+ */
+public class UpdateAdapter extends RecyclerView.Adapter<UpdateAdapter.UpdateViewHolder> {
+
+    public List<Update> updates;
+    public int itemCount;
+    private final UpdateAdapterOnClickHandler clickHandler;
+
+    public UpdateAdapter(List<Update> updates, UpdateAdapterOnClickHandler clickHandler) {
+        this.itemCount = updates == null ? 0 : updates.size();
+        this.updates = updates;
+        this.clickHandler = clickHandler;
+    }
+
+    public UpdateAdapter(UpdateAdapterOnClickHandler clickHandler) {
+        this.itemCount = 0;
+        this.updates = new ArrayList<>();
+        this.clickHandler = clickHandler;
+    }
+
+    public void addUpdate(Update update) {
+        if (updates == null) {
+            updates = new ArrayList<>();
+        }
+        updates.add(update);
+
+        this.itemCount = updates == null ? 0 : updates.size();
+
+        this.notifyDataSetChanged();
+    }
+
+    @Override
+    public UpdateViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new UpdateViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.card_update, parent, false));
+    }
+
+    @Override
+    public void onBindViewHolder(UpdateViewHolder holder, int position) {
+        final View itemView = holder.itemView;
+        Update update = updates.get(position);
+
+        // set text
+        final TextView tvText = itemView.findViewById(R.id.tv_updatecard_text);
+        tvText.setText(update.getText());
+
+        // messy hack that android forces me to use
+        // i can't get the line count without queuing a runnable, because it isn't known yet
+        // and will only be known once the layout is drawn
+        // queuing a runnable will make sure that it's called after drawing
+        tvText.post(() -> {
+            // if line count is more than the max
+            if (tvText.getLineCount() > 3) {
+                // set expand view to be visible
+                View viewExpand = itemView.findViewById(R.id.view_updatecard_expand);
+                viewExpand.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // set class
+        TextView tvClass = itemView.findViewById(R.id.tv_updatecard_class);
+        if (update.getAffected().isGlobal()) {
+            // tells user it's a global update
+            tvClass.setText(R.string.global_update);
+        } else {
+            // appends all classes to the class textview
+            if (update.getAffected() instanceof ClassesAffected) {
+                // get user's class
+                String userClass = PreferenceUtil.getClassPreference(holder.itemView.getContext());
+
+                // get the affected instance
+                ClassesAffected affected = (ClassesAffected) update.getAffected();
+
+                // set class textview to show affected classes, with user's class first
+                tvClass.setText(UpdateHelper.formatClassString(affected.getClassesAffected(), userClass));
+            }
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return itemCount;
+    }
+
+    public class UpdateViewHolder extends RecyclerView.ViewHolder {
+
+        public UpdateViewHolder(final View itemView) {
+            super(itemView);
+
+            // hacky way to handle clicks, but it works i guess
+            itemView.setOnClickListener(v -> clickHandler.onClickCard(v, updates.get(getAdapterPosition())));
+
+            itemView.setOnLongClickListener(v -> {
+                clickHandler.onClickOptions(v, updates.get(getAdapterPosition()), v.findViewById(R.id.btn_updatecard_options));
+                return true;
+            });
+
+            // click handler for options button
+            itemView.findViewById(R.id.btn_updatecard_options).setOnClickListener(v -> clickHandler.onClickOptions(v, updates.get(getAdapterPosition()), (Button) v));
+        }
+    }
+
+    public interface UpdateAdapterOnClickHandler {
+        void onClickCard(View v, Update update);
+        void onClickOptions(View v, Update update, Button buttonView); /* bypassing limitations */
+    }
+
+}
