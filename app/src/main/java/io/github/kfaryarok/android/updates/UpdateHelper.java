@@ -25,7 +25,14 @@ import java.util.Collections;
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.updates.api.ClassesAffected;
 import io.github.kfaryarok.android.updates.api.Update;
+import io.github.kfaryarok.android.util.NetworkUtil;
 import io.github.kfaryarok.android.util.PreferenceUtil;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Various utility methods for working with updates.
@@ -35,6 +42,24 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
 public class UpdateHelper {
 
     public static String DEFAULT_UPDATE_URL = "https://tbscdev.xyz/update.json";
+
+    /**
+     * Does everything needed to get the updates, from fetching JSON from server to parsing and filtering.
+     */
+    public static void getUpdatesReactively(Context ctx, Consumer<? super Update> onNext, Consumer<? super Throwable> onError,
+                                      Action onComplete, Consumer<? super Disposable> onSubscribe) {
+        Observable.just(UpdateHelper.DEFAULT_UPDATE_URL)
+                .observeOn(Schedulers.io()) // fetch on IO thread
+                .map(NetworkUtil::downloadUsingInputStreamReader)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                // parse updates from fetched data
+                .flatMap(data -> Observable.fromArray(UpdateParser.parseUpdates(data)))
+                // filter out irrelevant stuff
+                .filter(update -> update.getAffected().affects(PreferenceUtil.getClassPreference(ctx)))
+                // add updates to the adapter, do nothing on error and disable refreshing when complete
+                .subscribe(onNext, onError, onComplete, onSubscribe);
+    }
 
     /**
      * Creates a string of the classes in the array, with the user's current class first and

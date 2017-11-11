@@ -20,14 +20,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.kfaryarok.android.updates.UpdateAdapter;
 import io.github.kfaryarok.android.updates.UpdateHelper;
-import io.github.kfaryarok.android.updates.UpdateParser;
 import io.github.kfaryarok.android.updates.api.Update;
-import io.github.kfaryarok.android.util.NetworkUtil;
-import io.github.kfaryarok.android.util.PreferenceUtil;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.internal.functions.Functions;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements UpdateAdapter.UpdateAdapterOnClickHandler {
 
@@ -46,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
 
     private Toast toast;
 
+    private Consumer<? super Update> nextConsumerAddToAdapter = adapterRecyclerView::addUpdate;
+    private Action completeConsumerStopRefresh = () -> swipeRefreshLayout.setRefreshing(false);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +57,9 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             adapterRecyclerView.updates.clear();
-            addUpdatesToAdapter(true, true);
+            swipeRefreshLayout.setRefreshing(true);
+            UpdateHelper.getUpdatesReactively(this, nextConsumerAddToAdapter, Functions.emptyConsumer(),
+                    completeConsumerStopRefresh, Functions.emptyConsumer());
         });
     }
 
@@ -76,29 +77,13 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
         recyclerViewUpdates.setHasFixedSize(true);
 
         adapterRecyclerView = new UpdateAdapter(this);
-        addUpdatesToAdapter(true, true);
+        swipeRefreshLayout.setRefreshing(true);
+        UpdateHelper.getUpdatesReactively(this, nextConsumerAddToAdapter, Functions.emptyConsumer(),
+                completeConsumerStopRefresh, Functions.emptyConsumer());
         recyclerViewUpdates.setAdapter(adapterRecyclerView);
     }
 
-    /**
-     * Does everything needed to get the updates, from fetching JSON from server to parsing and filtering.
-     * @param startRefreshing Should it set the SwipeRefreshLayout to refresh
-     * @param stopRefreshing Should it set the SwipeRefreshLayout to stop refreshing (so true is to stop)
-     */
-    private void addUpdatesToAdapter(boolean startRefreshing, boolean stopRefreshing) {
-        swipeRefreshLayout.setRefreshing(startRefreshing);
-        Observable.just(UpdateHelper.DEFAULT_UPDATE_URL)
-                .observeOn(Schedulers.io()) // fetch on IO thread
-                .map(NetworkUtil::downloadUsingInputStreamReader)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                // parse updates from fetched data
-                .flatMap(data -> Observable.fromArray(UpdateParser.parseUpdates(data)))
-                // filter out irrelevant stuff
-                .filter(update -> update.getAffected().affects(PreferenceUtil.getClassPreference(this)))
-                // add updates to the adapter, do nothing on error and disable refreshing when complete
-                .subscribe(adapterRecyclerView::addUpdate, Functions.emptyConsumer(), () -> swipeRefreshLayout.setRefreshing(!stopRefreshing));
-    }
+
 
     /**
      * When card is clicked, expand it if needed

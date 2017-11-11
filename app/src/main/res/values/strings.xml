@@ -1,14 +1,25 @@
 <resources>
+    <!-- General strings -->
     <string name="app_name">KfarYarok-v2</string>
     <string name="debug_string">placeholder</string>
-
     <string name="global_update">עדכון כללי</string>
 
+    <!-- Activity strings -->
+    <string name="act_firstlaunch">הגדרות ראשוניות</string>
+
+    <!-- Menu strings -->
     <string name="menu_card_copytext">העתק עדכון</string>
 
+    <!-- Toast strings -->
     <string name="toast_card_copiedtext">טקסט הועתק</string>
 
+    <!-- Dialog strings -->
     <string name="dialog_pref_class_title">בחר כיתה</string>
+
+    <!-- Alert strings -->
+    <string name="alert_updates_title">עדכונים חדשים</string>
+    <string name="notif_channel_name">הכפר הירוק</string>
+    <string name="notif_channel_desc">התראות עדכונים יומיים</string>
 
     <!-- Preference key strings -->
     <string name="pref_class_string" translatable="false">class</string>
