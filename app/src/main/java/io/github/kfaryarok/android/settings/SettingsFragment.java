@@ -41,9 +41,15 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
+import io.github.kfaryarok.android.MainActivity;
 import io.github.kfaryarok.android.R;
+import io.github.kfaryarok.android.alerts.AlertHelper;
+import io.github.kfaryarok.android.alerts.BootReceiver;
 import io.github.kfaryarok.android.settings.prefs.ClassPreference;
+import io.github.kfaryarok.android.settings.prefs.ClassPreferenceDialogFragmentCompat;
 import io.github.kfaryarok.android.settings.prefs.TimePreference;
+import io.github.kfaryarok.android.updates.UpdateCache;
+import io.github.kfaryarok.android.updates.UpdateHelper;
 import io.github.kfaryarok.android.util.PreferenceUtil;
 
 /**
@@ -59,7 +65,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private CheckBoxPreference globalAlertsCb;
     private ClassPreference classCd;
     private EditTextPreference updateServerEtp;
-    private Preference forceFetchBp;
     private Preference resetAppBp;
 
     private Toast toast;
@@ -84,7 +89,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         classCd = (ClassPreference) findPreference(getString(R.string.pref_class_string));
         // mEtpClass = (EditTextPreference) findPreference(getString(R.string.pref_class_string));
         updateServerEtp = (EditTextPreference) findPreference(getString(R.string.pref_updateserver_string));
-        forceFetchBp = findPreference(getString(R.string.pref_forcefetch));
         resetAppBp = findPreference(getString(R.string.pref_reset_bool));
 
         boolean alertsEnabled = PreferenceUtil.getAlertEnabledPreference(getContext());
@@ -137,35 +141,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        forceFetchBp.setOnPreferenceClickListener(preference -> {
-            UpdateHelper.deleteCache(getContext());
-            Update[] updates = new Update[0];
-            try {
-                updates = new UpdateTask(s -> {
-                    if (toast != null) {
-                        toast.cancel();
-                    }
-                    toast = Toast.makeText(getContext(), s, Toast.LENGTH_LONG);
-                    toast.show();
-                }).execute(getContext()).get();
-            } catch (InterruptedException | ExecutionException e) {
-                Log.e("SettingsFragment", "UpdateTask interrupted: " + e.getMessage());
-            }
-            if (updates != null) {
-                if (toast != null) {
-                    toast.cancel();
-                }
-                toast = Toast.makeText(getContext(), getString(R.string.toast_devmode_forcefetch), Toast.LENGTH_LONG);
-                toast.show();
-            }
-            return true;
-        });
-
         updateServerEtp.setOnPreferenceChangeListener((preference, newValue) -> {
             String server = (String) newValue;
 
             if ("".equals(server)) {
-                server = UpdateFetcher.DEFAULT_UPDATE_URL;
+                server = UpdateHelper.DEFAULT_UPDATE_URL;
                 PreferenceUtil.getSharedPreferences(getContext()).edit()
                         .putString(getString(R.string.pref_updateserver_string), getString(R.string.pref_updateserver_string_def))
                         .commit();
@@ -193,7 +173,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             updateServerEtp.setSummary(server);
 
             // if changing server, than delete cache so new data from new server is fetched
-            UpdateHelper.deleteCache(getContext());
+            UpdateCache.deleteCache(getContext());
 
             return true;
         });

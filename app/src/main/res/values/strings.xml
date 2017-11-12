@@ -10,8 +10,37 @@
     <!-- Menu strings -->
     <string name="menu_card_copytext">העתק עדכון</string>
 
+    <!-- View strings -->
+    <string name="cb_firstlaunch_alerts">הפעל התראות</string>
+    <string name="btn_firstlaunch_timepicker">שעת התראה</string>
+    <string name="cb_firstlaunch_globalalerts">התריע על עדכונים כלליים</string>
+
     <!-- Toast strings -->
     <string name="toast_card_copiedtext">טקסט הועתק</string>
+    <string name="toast_invalid_class">כיתה לא תקינה</string>
+    <string name="toast_firstlaunch_no_class">בחר כיתה</string>
+    <string name="toast_devmode_enabled">מצב מפתח הופעל</string>
+    <string name="toast_devmode_disabled">מצב מפתח בוטל</string>
+    <string name="toast_devmode_clicks_remaining"> לחיצות נותרו</string>
+    <string name="toast_devmode_invalid_server">קישור לא תקין</string>
+    <string name="toast_devmode_defaultserver_revert">מחזיר לשרת עדכון רגיל</string>
+    <string name="toast_devmode_forcefetch">עדכונים חדשים הורדו בהצלחה</string>
+    <string name="toast_load_nocache_nointernet">התחברות לשרת נכשלה ואין עדכונים שמורים, התחבר לאינטרנט</string>
+    <string name="toast_load_defaultserver_revert">כישלון בעיבוד נתונים, מחזיר לשרת עדכון רגיל</string>
+    <string name="toast_load_nointernet_usingcache">התחברות לשרת נכשלה, מציג את העדכונים האחרונים שהורדו</string>
+    <string name="toast_load_failure">כישלון בעיבוד נתונים</string>
+
+    <!-- Preference text strings -->
+    <string name="settings_alertcategory_title">התראות</string>
+    <string name="settings_alertcategory_enabled">פעיל</string>
+    <string name="settings_advancedcategory_title">הגדרות מתקדמות</string>
+    <string name="settings_advancedcategory_server">שרת עדכון</string>
+    <string name="settings_advancedcategory_forcefetch">כפה הורדת עדכונים מחדש</string>
+    <string name="settings_advancedcategory_reset">אפס הגדרות</string>
+    <string name="settings_advancedcategory_reset_summary">מיד לאחר לחיצה על הכפתור, כל ההגדרות ימחקו!</string>
+    <string name="settings_class">כיתה</string>
+    <string name="settings_alerts_category" translatable="false">settings_alerts_category</string>
+    <string name="settings_advanced_category" translatable="false">settings_advanced_category</string>
 
     <!-- Dialog strings -->
     <string name="dialog_pref_class_title">בחר כיתה</string>
@@ -30,6 +59,7 @@
     <string name="pref_launched_before_bool" translatable="false">launched_before</string>
     <string name="pref_advanced_mode_bool" translatable="false">advanced_mode</string>
     <string name="pref_alerts_time_string" translatable="false">alerts_time</string>
+    <string name="pref_reset_bool" translatable="false">reset_on_next_launch</string>
 
     <!-- Preference default value strings -->
     <string name="pref_class_string_def" translatable="false" /> <!-- def is no class -->

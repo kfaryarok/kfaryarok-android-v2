@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import io.github.kfaryarok.android.R;
+import io.github.kfaryarok.android.settings.prefs.TimePreference;
 import io.github.kfaryarok.android.updates.UpdateHelper;
 
 /**
@@ -56,6 +57,14 @@ public class PreferenceUtil {
     public static boolean getGlobalAlertsPreference(Context ctx) {
         if (prefs == null) prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getBoolean(ctx.getString(R.string.pref_globalalerts_enabled_bool), Boolean.parseBoolean(ctx.getString(R.string.pref_globalalerts_enabled_bool_def)));
+    }
+
+    public static int parseAlertHour(Context ctx) {
+        return TimePreference.parseHour(getAlertTimePreference(ctx));
+    }
+
+    public static int parseAlertMinute(Context ctx) {
+        return TimePreference.parseMinute(getAlertTimePreference(ctx));
     }
 
     public static boolean getLaunchedBeforePreference(Context ctx) {
