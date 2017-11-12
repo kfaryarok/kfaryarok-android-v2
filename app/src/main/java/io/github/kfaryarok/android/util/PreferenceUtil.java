@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import io.github.kfaryarok.android.R;
+import io.github.kfaryarok.android.updates.UpdateHelper;
 
 /**
  * Utility class for getting values of various preferences.
@@ -67,10 +68,10 @@ public class PreferenceUtil {
         return prefs.getBoolean(ctx.getString(R.string.pref_advanced_mode_bool), Boolean.parseBoolean(ctx.getString(R.string.pref_advanced_mode_bool_def)));
     }
 
-//    public static String getUpdateServerPreference(Context ctx) {
-//        if (prefs == null) prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-//        String server = prefs.getString(ctx.getString(R.string.pref_updateserver_string), UpdateFetcher.DEFAULT_UPDATE_URL);
-//        return "".equals(server) ? UpdateFetcher.DEFAULT_UPDATE_URL : server;
-//    }
+    public static String getUpdateServerPreference(Context ctx) {
+        if (prefs == null) prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        String server = prefs.getString(ctx.getString(R.string.pref_updateserver_string), UpdateHelper.DEFAULT_UPDATE_URL);
+        return "".equals(server) ? UpdateHelper.DEFAULT_UPDATE_URL : server;
+    }
 
 }

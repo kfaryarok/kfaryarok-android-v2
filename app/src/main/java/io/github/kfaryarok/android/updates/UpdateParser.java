@@ -33,7 +33,7 @@ import io.github.kfaryarok.android.updates.api.UpdateImpl;
  * Takes the JSON string, parses it and returns an array of updates.
  * For information about how the JSON should be constructed, see JSONDATA.md.
  *
- * @author tbsc on 04/03/2017
+ * @author tbsc on 04/03/2017 (copied from v1)
  */
 public class UpdateParser {
 

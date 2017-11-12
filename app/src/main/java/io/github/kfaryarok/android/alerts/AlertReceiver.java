@@ -24,7 +24,7 @@ import android.content.Intent;
 /**
  * Receiver class for knowing when an alert was triggered.
  *
- * @author tbsc on 13/03/2017
+ * @author tbsc on 13/03/2017 (copied from v1)
  */
 public class AlertReceiver extends BroadcastReceiver {
 

@@ -50,7 +50,7 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
  * Class for configuring preferences.
  * Small note, in the SharedPreferences class is stored in HEBREW!
  *
- * @author tbsc on 06/03/2017
+ * @author tbsc on 06/03/2017 (copied from v1)
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
 

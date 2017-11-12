@@ -11,6 +11,8 @@ import io.github.kfaryarok.android.R;
 
 /**
  * Intent.EXTRA_TEXT is used to tell the activity if it's running as a first launch activity.
+ *
+ * @author tbsc on {unknown} (copied from v1)
  */
 public class SettingsActivity extends AppCompatActivity {
 

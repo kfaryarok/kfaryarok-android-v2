@@ -31,14 +31,20 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import io.github.kfaryarok.android.MainActivity;
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.settings.prefs.TimePreference;
+import io.github.kfaryarok.android.updates.UpdateCache;
+import io.github.kfaryarok.android.updates.UpdateHelper;
 import io.github.kfaryarok.android.updates.api.Update;
 import io.github.kfaryarok.android.util.PreferenceUtil;
+import io.reactivex.internal.functions.Functions;
 
 /**
  * This class is used to configure update alerts based on preferences and other things;
@@ -145,6 +151,7 @@ public class AlertHelper {
     }
 
     /**
+     * TODO: Redesign how notifications work, since they are built for the old fetch/cache system.
      * Creates a notification containing updates.
      * This method fetches updates, parses them, filters them (based on prefs) and formats them
      * into a notification, with updates line-separated.
@@ -153,14 +160,19 @@ public class AlertHelper {
      * @return The notification created
      */
     public static Notification showNotification(Context context, boolean show) {
-        Update[] updates =
+        List<Update> updates = new ArrayList<>();
+        UpdateHelper.getUpdatesReactively(context, updates::add, Functions.emptyConsumer(), () -> {
+
+        }, Functions.emptyConsumer());
+
         if (updates == null) {
             // error; exit
             return null;
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
-        builder.setContentTitle(context.getString(R.string.alert_updates_title) + " (" + UpdateHelper.getWhenLastCachedFormatted(context) + ")")
+        // TODO: Cache isn't set-up so it will never show correct time - start caching!
+        builder.setContentTitle(context.getString(R.string.alert_updates_title) + " (" + UpdateCache.getWhenLastCachedFormatted(context) + ")")
                 .setSmallIcon(R.mipmap.ic_launcher);
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -177,12 +189,12 @@ public class AlertHelper {
             inboxStyle.addLine(UpdateHelper.formatUpdate(update, context));
         }
 
-        if (updates.length == 0) {
+        if (updates.size() == 0) {
             inboxStyle.addLine("אין עדכונים");
         }
 
         // give style to builder
-        inboxStyle.setBigContentTitle("עדכונים" + " (" + UpdateHelper.getWhenLastCachedFormatted(context) + "):");
+        inboxStyle.setBigContentTitle("עדכונים" + " (" + UpdateCache.getWhenLastCachedFormatted(context) + "):");
         builder.setStyle(inboxStyle);
 
         // create explicit intent to main activity

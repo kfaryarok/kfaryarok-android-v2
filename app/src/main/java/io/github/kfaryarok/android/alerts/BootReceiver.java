@@ -21,12 +21,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import io.github.kfaryarok.kfaryarokapp.util.PreferenceUtil;
+import io.github.kfaryarok.android.util.PreferenceUtil;
 
 /**
  * Responsible for receiving boot broadcasts and resetting the alert back.
  *
- * @author tbsc on 11/03/2017
+ * @author tbsc on 11/03/2017 (copied from v1)
  */
 public class BootReceiver extends BroadcastReceiver {
 
