@@ -29,13 +29,11 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import io.github.kfaryarok.android.MainActivity;
 import io.github.kfaryarok.android.R;
@@ -157,73 +155,68 @@ public class AlertHelper {
      * into a notification, with updates line-separated.
      * @param context Used for getting preferences and strings
      * @param show Should it be shown to the user
-     * @return The notification created
      */
-    public static Notification showNotification(Context context, boolean show) {
+    public static void showNotification(Context context, boolean show) {
         List<Update> updates = new ArrayList<>();
         UpdateHelper.getUpdatesReactively(context, updates::add, Functions.emptyConsumer(), () -> {
-
-        }, Functions.emptyConsumer());
-
-        if (updates == null) {
-            // error; exit
-            return null;
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
-        // TODO: Cache isn't set-up so it will never show correct time - start caching!
-        builder.setContentTitle(context.getString(R.string.alert_updates_title) + " (" + UpdateCache.getWhenLastCachedFormatted(context) + ")")
-                .setSmallIcon(R.mipmap.ic_launcher);
-
-        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-
-        for (Update update : updates) {
-            if (!PreferenceUtil.getGlobalAlertsPreference(context)) {
-                // if set to not show global updates
-                if (update.getAffected().isGlobal()) {
-                    // and it's a global update, skip
-                    continue;
-                }
+            if (updates.isEmpty()) {
+                // error; stop
+                return;
             }
-            // add update as line to the notification
-            inboxStyle.addLine(UpdateHelper.formatUpdate(update, context));
-        }
 
-        if (updates.size() == 0) {
-            inboxStyle.addLine("אין עדכונים");
-        }
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
+            // TODO: Cache isn't set-up so it will never show correct time - start caching!
+            builder.setContentTitle(context.getString(R.string.alert_updates_title) + " (" + UpdateCache.getWhenLastCachedFormatted(context) + ")")
+                    .setSmallIcon(R.mipmap.ic_launcher);
 
-        // give style to builder
-        inboxStyle.setBigContentTitle("עדכונים" + " (" + UpdateCache.getWhenLastCachedFormatted(context) + "):");
-        builder.setStyle(inboxStyle);
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-        // create explicit intent to main activity
-        Intent mainActivity = new Intent(context, MainActivity.class);
-        // create a stack for telling android what to launch
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            for (Update update : updates) {
+                if (!PreferenceUtil.getGlobalAlertsPreference(context)) {
+                    // if set to not show global updates
+                    if (update.getAffected().isGlobal()) {
+                        // and it's a global update, skip
+                        continue;
+                    }
+                }
+                // add update as line to the notification
+                inboxStyle.addLine(UpdateHelper.formatUpdate(update, context));
+            }
 
-        // tell it to go to main activity
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(mainActivity);
+            if (updates.size() == 0) {
+                inboxStyle.addLine("אין עדכונים");
+            }
 
-        // get the pending intent
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-        // give it to the notification builder
-        builder.setContentIntent(pendingIntent);
+            // give style to builder
+            inboxStyle.setBigContentTitle("עדכונים" + " (" + UpdateCache.getWhenLastCachedFormatted(context) + "):");
+            builder.setStyle(inboxStyle);
 
-        // cancel notif when clicked
-        builder.setAutoCancel(true);
+            // create explicit intent to main activity
+            Intent mainActivity = new Intent(context, MainActivity.class);
+            // create a stack for telling android what to launch
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 
-        // bob the build-it
-        Notification notif = builder.build();
+            // tell it to go to main activity
+            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addNextIntent(mainActivity);
 
-        if (show) {
-            // show notification
-            NotificationManager notifManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notifManager.notify(AlertHelper.NOTIFICATION_ALERT, notif);
-        }
+            // get the pending intent
+            PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            // give it to the notification builder
+            builder.setContentIntent(pendingIntent);
 
-        return notif;
+            // cancel notif when clicked
+            builder.setAutoCancel(true);
+
+            // bob the build-it
+            Notification notif = builder.build();
+
+            if (show) {
+                // show notification
+                NotificationManager notifManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                notifManager.notify(AlertHelper.NOTIFICATION_ALERT, notif);
+            }
+        }, Functions.emptyConsumer());
     }
 
 }

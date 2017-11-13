@@ -18,13 +18,20 @@
 package io.github.kfaryarok.android.updates;
 
 import android.content.Context;
+import android.util.Log;
 
+import org.json.JSONException;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.updates.api.ClassesAffected;
 import io.github.kfaryarok.android.updates.api.Update;
+import io.github.kfaryarok.android.updates.api.UpdateImpl;
 import io.github.kfaryarok.android.util.NetworkUtil;
 import io.github.kfaryarok.android.util.PreferenceUtil;
 import io.reactivex.Observable;
@@ -48,9 +55,8 @@ public class UpdateHelper {
      */
     public static void getUpdatesReactively(Context ctx, Consumer<? super Update> onNext, Consumer<? super Throwable> onError,
                                       Action onComplete, Consumer<? super Disposable> onSubscribe) {
-        Observable.just(UpdateHelper.DEFAULT_UPDATE_URL)
-                .observeOn(Schedulers.io()) // fetch on IO thread
-                .map(NetworkUtil::downloadUsingInputStreamReader)
+        decideOnSource(ctx)
+
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 // parse updates from fetched data
@@ -59,6 +65,47 @@ public class UpdateHelper {
                 .filter(update -> update.getAffected().affects(PreferenceUtil.getClassPreference(ctx)))
                 // add updates to the adapter, do nothing on error and disable refreshing when complete
                 .subscribe(onNext, onError, onComplete, onSubscribe);
+    }
+
+    private static Observable<String> decideOnSource(Context ctx) {
+        // if cache is newer than an hour, use it
+        if (!UpdateCache.isCacheOlderThan1Hour(ctx)) {
+            try {
+                return cacheSource(ctx);
+            } catch (FileNotFoundException cacheException) {
+                return networkSource(ctx, true);
+            }
+        } else {
+            return networkSource(ctx, true);
+        }
+    }
+
+    private static Observable<String> cacheSource(Context ctx) throws FileNotFoundException {
+        return Observable.just(UpdateCache.getUpdatesCache(ctx));
+    }
+
+    private static Observable<String> networkSource(Context ctx, boolean saveToCache) {
+        return Observable.just(UpdateHelper.DEFAULT_UPDATE_URL)
+                .observeOn(Schedulers.io()) // fetch on IO thread
+                .map(NetworkUtil::downloadUsingInputStreamReader)
+                .defaultIfEmpty(ctx.getString(R.string.))
+                .map(data -> {
+                    // "fake" mapping - doing something with each value but returning the same value
+                    // this saves to cache but doesn't change the data
+                    if (saveToCache) {
+                        // save data to cache
+                        UpdateCache.setUpdatesCache(ctx, data);
+                    }
+                    return data;
+                });
+    }
+
+    /**
+     * A JSON string that contains a fake update, detailing an error.
+     * @return fake error JSON string
+     */
+    public static String getFakeErrorUpdateJSON() {
+        return "{\"global_updates\":[],\"updates\":[{\"text\":\"<text here>\",\"classes\":\"\"}]}";
     }
 
     /**

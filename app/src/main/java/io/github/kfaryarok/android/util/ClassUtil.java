@@ -377,6 +377,7 @@ public class ClassUtil {
     /**
      * Tries to get the (current) number of classes in the given grade.
      * I.e.: In grade H there are 9 classes (H1-9), so it'll return 9.
+     * TODO: Outdated! For now on it'll just be 11 for all grades but try to figure out something
      *
      * Not creating a unit test for this one, as there isn't really anything to test here
      * @param grade Hebrew grade
@@ -384,26 +385,27 @@ public class ClassUtil {
      */
     public static int getClassesInHebrewGrade(String grade) {
         // just incase grade is null (if no grade is selected)
-        if (grade == null) {
-            return 11;
-        }
-
-        switch (grade) {
-            case "ז":
-                return 10;
-            case "ח":
-                return 9;
-            case "ט":
-                return 11;
-            case "י":
-                return 11;
-            case "יא":
-                return 11;
-            case "יב":
-                return 11;
-            default:
-                return 11;
-        }
+//        if (grade == null) {
+//            return 11;
+//        }
+//
+//        switch (grade) {
+//            case "ז":
+//                return 10;
+//            case "ח":
+//                return 9;
+//            case "ט":
+//                return 11;
+//            case "י":
+//                return 11;
+//            case "יא":
+//                return 11;
+//            case "יב":
+//                return 11;
+//            default:
+//                return 11;
+//        }
+        return 11;
     }
 
 }
