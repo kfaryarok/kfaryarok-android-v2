@@ -19,15 +19,17 @@ package io.github.kfaryarok.android.settings.prefs;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
 
@@ -37,12 +39,16 @@ import io.github.kfaryarok.android.util.ClassUtil;
 /**
  * Fragment for the TimePreference to show when clicked, and to have control of it.
  *
+ * TODO: Find a way to let the user have no class selected and show all updates, regardless of class
+ *
  * @author tbsc on 10/03/2017 (copied from v1)
  */
 public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat implements DialogPreference.TargetFragment {
 
     RadioGroup gradeRadioGroup;
     NumberPicker classNumPicker;
+    CheckBox showAllCheckBox;
+    LinearLayout selectorLinearLayout;
 
     @Override
     protected View onCreateDialogView(Context context) {
@@ -54,9 +60,7 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         if (dialog.getWindow() != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                dialog.getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            }
+            ViewCompat.setLayoutDirection(dialog.getWindow().getDecorView(), ViewCompat.LAYOUT_DIRECTION_RTL);
         }
         return dialog;
     }
@@ -67,6 +71,8 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
 
         gradeRadioGroup = v.findViewById(R.id.rg_dialog_grade);
         classNumPicker = v.findViewById(R.id.np_dialog_class_num);
+        showAllCheckBox = v.findViewById(R.id.cb_dialog_class_showall);
+        selectorLinearLayout = v.findViewById(R.id.ll_dialog_class_selectors);
         final ClassPreference pref = (ClassPreference) getPreference();
 
         // set options and set current selected entries
@@ -80,17 +86,24 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
         classNumPicker.setMaxValue(ClassUtil.getClassesInHebrewGrade(pref.grade));
         classNumPicker.setWrapSelectorWheel(false);
         classNumPicker.setValue(pref.classNum);
+
+        // allow selecting a class if not set to show all updates, regardless of class
+        showAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> selectorLinearLayout.setClickable(!isChecked));
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
-            @IdRes int gradeRes = gradeRadioGroup.getCheckedRadioButtonId();
-            String grade = convertGradeRadioButtonResToString(getContext(), gradeRes);
-            int classNum = classNumPicker.getValue();
             ClassPreference pref = (ClassPreference) getPreference();
-            pref.setClass(grade, classNum);
-            getPreference().setSummary(grade + classNum);
+            if (showAllCheckBox.isChecked()) {
+
+            } else {
+                @IdRes int gradeRes = gradeRadioGroup.getCheckedRadioButtonId();
+                String grade = convertGradeRadioButtonResToString(getContext(), gradeRes);
+                int classNum = classNumPicker.getValue();
+                pref.setClass(grade, classNum);
+                getPreference().setSummary(grade + classNum);
+            }
         }
     }
 
@@ -117,8 +130,8 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
      *   - {@link io.github.kfaryarok.android.R.string#grade_k}
      *   - {@link io.github.kfaryarok.android.R.string#grade_l}
      * Example:
-     * Input: {@link io.github.kfaryarok.kfaryarokapp.R.id#rb_dialog_grade_h}
-     * Output: VALUE of {@link io.github.kfaryarok.kfaryarokapp.R.string#grade_h}
+     * Input: {@link io.github.kfaryarok.android.R.id#rb_dialog_grade_h}
+     * Output: VALUE of {@link io.github.kfaryarok.android.R.string#grade_h}
      *         which is ח
      *
      * @param ctx Used to get string grade strings

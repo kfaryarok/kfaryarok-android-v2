@@ -14,6 +14,11 @@
     <string name="cb_firstlaunch_alerts">הפעל התראות</string>
     <string name="btn_firstlaunch_timepicker">שעת התראה</string>
     <string name="cb_firstlaunch_globalalerts">התריע על עדכונים כלליים</string>
+    <string name="cb_dialog_class_showall">הצג הכל</string>
+
+    <!-- Used when some unrecoverable error during update loading occurred,
+     and user needs to be notified of it -->
+    <string name="error_update_text">שגיאה (הודעה יותר מפורטת)</string>
 
     <!-- Toast strings -->
     <string name="toast_card_copiedtext">טקסט הועתק</string>

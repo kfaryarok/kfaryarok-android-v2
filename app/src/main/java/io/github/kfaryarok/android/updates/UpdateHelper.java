@@ -18,20 +18,14 @@
 package io.github.kfaryarok.android.updates;
 
 import android.content.Context;
-import android.util.Log;
 
-import org.json.JSONException;
-
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.updates.api.ClassesAffected;
 import io.github.kfaryarok.android.updates.api.Update;
-import io.github.kfaryarok.android.updates.api.UpdateImpl;
 import io.github.kfaryarok.android.util.NetworkUtil;
 import io.github.kfaryarok.android.util.PreferenceUtil;
 import io.reactivex.Observable;
@@ -56,7 +50,6 @@ public class UpdateHelper {
     public static void getUpdatesReactively(Context ctx, Consumer<? super Update> onNext, Consumer<? super Throwable> onError,
                                       Action onComplete, Consumer<? super Disposable> onSubscribe) {
         decideOnSource(ctx)
-
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 // parse updates from fetched data
@@ -88,7 +81,7 @@ public class UpdateHelper {
         return Observable.just(UpdateHelper.DEFAULT_UPDATE_URL)
                 .observeOn(Schedulers.io()) // fetch on IO thread
                 .map(NetworkUtil::downloadUsingInputStreamReader)
-                .defaultIfEmpty(ctx.getString(R.string.))
+                .defaultIfEmpty(ctx.getString(R.string.error_update_text))
                 .map(data -> {
                     // "fake" mapping - doing something with each value but returning the same value
                     // this saves to cache but doesn't change the data
