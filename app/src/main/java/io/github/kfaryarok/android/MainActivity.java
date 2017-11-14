@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
 
     private Toast toast;
 
-    private Consumer<? super Update> nextConsumerAddToAdapter = adapterRecyclerView::addUpdate;
+    private Consumer<Update> nextConsumerAddToAdapter = adapterRecyclerView::addUpdate;
     private Action completeConsumerStopRefresh = () -> swipeRefreshLayout.setRefreshing(false);
 
     @Override
