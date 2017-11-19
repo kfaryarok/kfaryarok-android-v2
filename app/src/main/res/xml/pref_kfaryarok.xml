@@ -5,9 +5,14 @@
         android:selectAllOnFocus="true"
         android:title="@string/settings_class" />-->
 
-    <io.github.kfaryarok.kfaryarokapp.prefs.ClassPreference
+    <io.github.kfaryarok.android.settings.prefs.ClassPreference
         android:key="@string/pref_class_string"
         android:title="@string/settings_class" />
+
+    <CheckBoxPreference
+        android:key="@string/pref_show_all_updates_bool"
+        android:title="@string/settings_show_all_updates"
+        android:defaultValue="false" />
 
     <android.support.v7.preference.PreferenceCategory
         android:key="@string/settings_alerts_category"
@@ -18,7 +23,7 @@
             android:key="@string/pref_alerts_enabled_bool"
             android:defaultValue="true" />
 
-        <io.github.kfaryarok.kfaryarokapp.prefs.TimePreference
+        <io.github.kfaryarok.android.settings.prefs.TimePreference
             android:key="@string/pref_alerts_time_string"
             android:title="@string/btn_firstlaunch_timepicker"
             android:defaultValue="@string/pref_alerts_time_string_def"

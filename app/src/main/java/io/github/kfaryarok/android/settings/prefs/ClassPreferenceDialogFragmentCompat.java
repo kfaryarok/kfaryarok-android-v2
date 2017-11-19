@@ -19,22 +19,23 @@ package io.github.kfaryarok.android.settings.prefs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.preference.DialogPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.util.ClassUtil;
+import io.github.kfaryarok.android.util.LayoutUtil;
 
 /**
  * Fragment for the TimePreference to show when clicked, and to have control of it.
@@ -47,8 +48,10 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
 
     RadioGroup gradeRadioGroup;
     NumberPicker classNumPicker;
-    CheckBox showAllCheckBox;
+    // CheckBox showAllCheckBox;
     LinearLayout selectorLinearLayout;
+
+    private Toast toast;
 
     @Override
     protected View onCreateDialogView(Context context) {
@@ -60,7 +63,7 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         if (dialog.getWindow() != null) {
-            ViewCompat.setLayoutDirection(dialog.getWindow().getDecorView(), ViewCompat.LAYOUT_DIRECTION_RTL);
+            LayoutUtil.setDirection(dialog.getWindow().getDecorView(), LayoutUtil.RTL);
         }
         return dialog;
     }
@@ -71,7 +74,7 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
 
         gradeRadioGroup = v.findViewById(R.id.rg_dialog_grade);
         classNumPicker = v.findViewById(R.id.np_dialog_class_num);
-        showAllCheckBox = v.findViewById(R.id.cb_dialog_class_showall);
+        // showAllCheckBox = v.findViewById(R.id.cb_dialog_class_showall);
         selectorLinearLayout = v.findViewById(R.id.ll_dialog_class_selectors);
         final ClassPreference pref = (ClassPreference) getPreference();
 
@@ -88,22 +91,34 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
         classNumPicker.setValue(pref.classNum);
 
         // allow selecting a class if not set to show all updates, regardless of class
-        showAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> selectorLinearLayout.setClickable(!isChecked));
+        // showAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> selectorLinearLayout.setClickable(!isChecked));
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
             ClassPreference pref = (ClassPreference) getPreference();
-            if (showAllCheckBox.isChecked()) {
+            @IdRes int gradeRes = gradeRadioGroup.getCheckedRadioButtonId();
+            String grade = convertGradeRadioButtonResToString(getContext(), gradeRes);
+            int classNum = classNumPicker.getValue();
+            pref.setClass(grade, classNum);
+            pref.setSummary(grade + classNum);
+        }
+    }
 
-            } else {
-                @IdRes int gradeRes = gradeRadioGroup.getCheckedRadioButtonId();
-                String grade = convertGradeRadioButtonResToString(getContext(), gradeRes);
-                int classNum = classNumPicker.getValue();
-                pref.setClass(grade, classNum);
-                getPreference().setSummary(grade + classNum);
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        if (gradeRadioGroup.getCheckedRadioButtonId() == -1) {
+            // a radio button ID of -1 means nothing is selected
+            // notify user he needs to enter a grade too
+            if (toast != null) {
+                toast.cancel();
             }
+            toast = Toast.makeText(getContext(), getString(R.string.toast_class_selector_nograde_selected), Toast.LENGTH_LONG);
+            toast.show();
+        } else {
+            // let user exit only if he entered a grade
+            super.onDismiss(dialog);
         }
     }
 
@@ -167,11 +182,11 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
     @IdRes
     public static int convertGradeStringToRadioButtonRes(String grade) {
         if (grade == null || grade.length() == 0) {
-            return 0;
+            return -1;
         }
 
         if (!ClassUtil.isValidHebrewGrade(grade)) {
-            return 0;
+            return -1;
         }
 
         switch (grade) {
@@ -188,7 +203,7 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
             case "יב":
                 return R.id.rb_dialog_grade_l;
             default:
-                return 0;
+                return -1;
         }
     }
 

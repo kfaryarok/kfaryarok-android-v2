@@ -2,19 +2,29 @@
     <!-- General strings -->
     <string name="app_name">KfarYarok-v2</string>
     <string name="debug_string">placeholder</string>
-    <string name="global_update">עדכון כללי</string>
+    <string name="global_update">הודעת מערכת</string>
 
     <!-- Activity strings -->
+    <string name="act_update_details">הודעה</string>
     <string name="act_firstlaunch">הגדרות ראשוניות</string>
+    <string name="act_settings">הגדרות</string>
 
     <!-- Menu strings -->
-    <string name="menu_card_copytext">העתק עדכון</string>
+    <string name="menu_settings">הגדרות</string>
+    <string name="menu_advanced">מצב מתקדם</string>
+    <string name="menu_about">אודות</string>
+    <string name="menu_card_copytext">העתק הודעה</string>
 
     <!-- View strings -->
+    <string name="btn_devmode_easteregg">dev off</string>
     <string name="cb_firstlaunch_alerts">הפעל התראות</string>
     <string name="btn_firstlaunch_timepicker">שעת התראה</string>
-    <string name="cb_firstlaunch_globalalerts">התריע על עדכונים כלליים</string>
+    <string name="cb_firstlaunch_globalalerts">התריע על הודעות מערכת</string>
     <string name="cb_dialog_class_showall">הצג הכל</string>
+    <string name="tv_firstlaunch_page1_class_title">בחר כיתה</string>
+    <string name="tv_firstlaunch_page2_alerts_title">הגדר התראות</string>
+    <string name="btn_firstlaunch_page3_finish">סיום</string>
+    <string name="tv_firstlaunch_page2_alerts_toggle">הפעל התראות</string>
 
     <!-- Used when some unrecoverable error during update loading occurred,
      and user needs to be notified of it -->
@@ -28,22 +38,26 @@
     <string name="toast_devmode_disabled">מצב מפתח בוטל</string>
     <string name="toast_devmode_clicks_remaining"> לחיצות נותרו</string>
     <string name="toast_devmode_invalid_server">קישור לא תקין</string>
-    <string name="toast_devmode_defaultserver_revert">מחזיר לשרת עדכון רגיל</string>
-    <string name="toast_devmode_forcefetch">עדכונים חדשים הורדו בהצלחה</string>
-    <string name="toast_load_nocache_nointernet">התחברות לשרת נכשלה ואין עדכונים שמורים, התחבר לאינטרנט</string>
-    <string name="toast_load_defaultserver_revert">כישלון בעיבוד נתונים, מחזיר לשרת עדכון רגיל</string>
-    <string name="toast_load_nointernet_usingcache">התחברות לשרת נכשלה, מציג את העדכונים האחרונים שהורדו</string>
+    <string name="toast_devmode_defaultserver_revert">מחזיר לשרת הודעות רגיל</string>
+    <string name="toast_devmode_forcefetch">הודעות חדשים הורדו בהצלחה</string>
+    <string name="toast_load_nocache_nointernet">התחברות לשרת נכשלה ואין הודעות שמורות, התחבר לאינטרנט</string>
+    <string name="toast_load_defaultserver_revert">כישלון בעיבוד נתונים, מחזיר לשרת הודעות רגיל</string>
+    <string name="toast_load_nointernet_usingcache">התחברות לשרת נכשלה, מציג את ההודעות האחרונות שהורדו</string>
     <string name="toast_load_failure">כישלון בעיבוד נתונים</string>
+    <string name="toast_class_selector_nograde_selected">לא נבחרה שכבה</string>
 
     <!-- Preference text strings -->
     <string name="settings_alertcategory_title">התראות</string>
     <string name="settings_alertcategory_enabled">פעיל</string>
     <string name="settings_advancedcategory_title">הגדרות מתקדמות</string>
-    <string name="settings_advancedcategory_server">שרת עדכון</string>
-    <string name="settings_advancedcategory_forcefetch">כפה הורדת עדכונים מחדש</string>
+    <string name="settings_advancedcategory_server">שרת הודעות</string>
+    <string name="settings_advancedcategory_forcefetch">כפה הורדת הודעות מחדש</string>
     <string name="settings_advancedcategory_reset">אפס הגדרות</string>
     <string name="settings_advancedcategory_reset_summary">מיד לאחר לחיצה על הכפתור, כל ההגדרות ימחקו!</string>
     <string name="settings_class">כיתה</string>
+    <string name="settings_show_all_updates">הצג הודעות של כל הכיתות</string>
+
+    <!-- Preference categories -->
     <string name="settings_alerts_category" translatable="false">settings_alerts_category</string>
     <string name="settings_advanced_category" translatable="false">settings_advanced_category</string>
 
@@ -51,9 +65,9 @@
     <string name="dialog_pref_class_title">בחר כיתה</string>
 
     <!-- Alert strings -->
-    <string name="alert_updates_title">עדכונים חדשים</string>
+    <string name="alert_updates_title">הודעות חדשות</string>
     <string name="notif_channel_name">הכפר הירוק</string>
-    <string name="notif_channel_desc">התראות עדכונים יומיים</string>
+    <string name="notif_channel_desc">התראת הודעות יומיות</string>
 
     <!-- Preference key strings -->
     <string name="pref_class_string" translatable="false">class</string>
@@ -65,10 +79,11 @@
     <string name="pref_advanced_mode_bool" translatable="false">advanced_mode</string>
     <string name="pref_alerts_time_string" translatable="false">alerts_time</string>
     <string name="pref_reset_bool" translatable="false">reset_on_next_launch</string>
+    <string name="pref_show_all_updates_bool" translatable="false">show_all_updates</string>
 
     <!-- Preference default value strings -->
-    <string name="pref_class_string_def" translatable="false" /> <!-- def is no class -->
-    <string name="pref_updateserver_string_def" translatable="false" />
+    <string name="pref_class_string_def" translatable="false"/> <!-- def is no class -->
+    <string name="pref_updateserver_string_def" translatable="false"/>
     <string name="pref_alerts_enabled_bool_def" translatable="false">true</string>
     <string name="pref_globalalerts_enabled_bool_def" translatable="false">true</string>
     <string name="pref_launched_before_bool_def" translatable="false">false</string>
@@ -83,4 +98,9 @@
     <string name="grade_j">י</string>
     <string name="grade_k">יא</string>
     <string name="grade_l">יב</string>
+
+    <!-- Content description strings -->
+    <string name="contentdesc_firstlaunch_page3_finish">finish setup</string>
+    <string name="contentdesc_nextpage">previous page</string>
+    <string name="contentdesc_prevpage">previous page</string>
 </resources>

@@ -1,13 +1,11 @@
 package io.github.kfaryarok.android.settings;
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import io.github.kfaryarok.android.R;
+import io.github.kfaryarok.android.util.LayoutUtil;
 
 /**
  * Intent.EXTRA_TEXT is used to tell the activity if it's running as a first launch activity.
@@ -21,7 +19,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        boolean mFirstLaunchActivity = getIntent().getBooleanExtra(Intent.EXTRA_TEXT, false);
+        boolean mFirstLaunchActivity = getIntent().getBooleanExtra(SettingsFragment.FIRST_LAUNCH_INTENT, false);
 
         if (mFirstLaunchActivity) {
             ActionBar ab = getSupportActionBar();
@@ -34,9 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
             setTitle(R.string.act_firstlaunch);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-        }
+        LayoutUtil.setDirection(this, LayoutUtil.RTL);
     }
 
 }

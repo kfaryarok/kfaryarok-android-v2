@@ -56,7 +56,6 @@ public class UpdateHelper {
                 .flatMap(data -> Observable.fromArray(UpdateParser.parseUpdates(data)))
                 // filter out irrelevant stuff
                 .filter(update -> update.getAffected().affects(PreferenceUtil.getClassPreference(ctx)))
-                // add updates to the adapter, do nothing on error and disable refreshing when complete
                 .subscribe(onNext, onError, onComplete, onSubscribe);
     }
 
@@ -78,7 +77,7 @@ public class UpdateHelper {
     }
 
     private static Observable<String> networkSource(Context ctx, boolean saveToCache) {
-        return Observable.just(UpdateHelper.DEFAULT_UPDATE_URL)
+        return Observable.just(PreferenceUtil.getUpdateServerPreference(ctx))
                 .observeOn(Schedulers.io()) // fetch on IO thread
                 .map(NetworkUtil::downloadUsingInputStreamReader)
                 .defaultIfEmpty(ctx.getString(R.string.error_update_text))
@@ -118,10 +117,11 @@ public class UpdateHelper {
      * @return Class array in string form, comma-separated.
      */
     public static String formatClassString(String[] classes, String userClass) {
-        if (classes == null || classes.length == 0 || userClass == null || userClass.length() == 0) {
+        if (classes == null || classes.length == 0) {
             // if anything is invalid just return null
             return null;
         }
+
         // string builder for creating the class string
         StringBuilder classBuilder = new StringBuilder();
 
@@ -129,15 +129,20 @@ public class UpdateHelper {
         ArrayList<String> classList = new ArrayList<>();
         Collections.addAll(classList, classes);
 
+        boolean firstElementRemoved = false;
+
         if (classList.contains(userClass)) {
             // don't assume about user class, first check if it's even there
             classBuilder.append(userClass);
             classList.remove(userClass);
+            firstElementRemoved = true;
         }
 
         if (!classList.isEmpty()) {
-            // there are more classes, put a comma
-            classBuilder.append(", ");
+            if (firstElementRemoved) {
+                // there are more classes, put a comma
+                classBuilder.append(", ");
+            }
 
             for (int i = 0; i < classList.size(); i++) {
                 // put the class

@@ -2,15 +2,17 @@ package io.github.kfaryarok.android;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
-import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,9 +20,13 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.kfaryarok.android.firstlaunch.FirstLaunchActivity;
+import io.github.kfaryarok.android.settings.SettingsActivity;
 import io.github.kfaryarok.android.updates.UpdateAdapter;
 import io.github.kfaryarok.android.updates.UpdateHelper;
 import io.github.kfaryarok.android.updates.api.Update;
+import io.github.kfaryarok.android.util.LayoutUtil;
+import io.github.kfaryarok.android.util.PreferenceUtil;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.internal.functions.Functions;
@@ -42,17 +48,29 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
 
     private Toast toast;
 
-    private Consumer<Update> nextConsumerAddToAdapter = adapterRecyclerView::addUpdate;
+    private Consumer<Update> nextConsumerAddToAdapter = (update) -> {
+        if (adapterRecyclerView != null) {
+            adapterRecyclerView.addUpdate(update);
+        }
+    };
     private Action completeConsumerStopRefresh = () -> swipeRefreshLayout.setRefreshing(false);
+
+    public static boolean resumeFromFirstLaunch = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // registering implicit receivers in API 26 can only be done programmatically
+        // TODO: Figure this out completely
+        // registerReceiver(bootReceiver = new BootReceiver(), new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
 
-        setupLayoutDirection();
+        firstLaunchCheck();
+
+        LayoutUtil.setDirection(this, LayoutUtil.LTR);
         setupRecyclerView();
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
@@ -63,12 +81,14 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
         });
     }
 
-    /**
-     * Changes the layout direction of the activity to LTR, to ensure direction of the UI
-     * stays the same regardless of the phone's language
-     */
-    public void setupLayoutDirection() {
-        ViewCompat.setLayoutDirection(getWindow().getDecorView(), ViewCompat.LAYOUT_DIRECTION_LTR);
+    private void firstLaunchCheck() {
+        if (!PreferenceUtil.getLaunchedBeforePreference(this)) {
+            // first launch
+//            Intent firstLaunchActivity = new Intent(this, SettingsActivity.class).putExtra(SettingsFragment.FIRST_LAUNCH_INTENT, true);
+//            startActivity(firstLaunchActivity);
+            Intent firstLaunchActivity = new Intent(this, FirstLaunchActivity.class);
+            startActivity(firstLaunchActivity);
+        }
     }
 
     private void setupRecyclerView() {
@@ -83,7 +103,34 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
         recyclerViewUpdates.setAdapter(adapterRecyclerView);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                startActivity(new Intent(this, SettingsActivity.class).putExtra(Intent.EXTRA_TEXT, false));
+                break;
+            case R.id.menu_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (resumeFromFirstLaunch) {
+            resumeFromFirstLaunch = false;
+            recreate();
+        }
+    }
 
     /**
      * When card is clicked, expand it if needed

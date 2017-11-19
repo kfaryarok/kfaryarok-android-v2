@@ -34,14 +34,33 @@ public class PreferenceUtil {
 
     private static SharedPreferences prefs;
 
-    public static SharedPreferences getSharedPreferences(Context ctx) {
+    public static SharedPreferences prefs(Context ctx) {
         if (prefs == null) prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs;
     }
 
-    public static String getClassPreference(Context ctx) {
+    public static boolean getShowAllUpdatesPreference(Context ctx) {
+        if (prefs == null) prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return prefs.getBoolean(ctx.getString(R.string.pref_show_all_updates_bool), false);
+    }
+
+    public static String getActualStoredClassPreference(Context ctx) {
         if (prefs == null) prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getString(ctx.getString(R.string.pref_class_string), ctx.getString(R.string.pref_class_string_def));
+    }
+
+    public static String getClassPreference(Context ctx) {
+        if (prefs == null) prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        // This method is a bit more complicated than just getting the preference.
+        // It also takes in account the show_all_updates preference, before the class itself.
+
+        // if preferences are set to show all updates, return an empty string - causing it to show all
+        if (getShowAllUpdatesPreference(ctx)) {
+            return "";
+        } else {
+            // not set to show all updates, return based on actual class
+            return getActualStoredClassPreference(ctx);
+        }
     }
 
     public static boolean getAlertEnabledPreference(Context ctx) {
