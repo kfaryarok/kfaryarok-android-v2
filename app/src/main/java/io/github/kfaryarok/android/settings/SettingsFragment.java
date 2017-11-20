@@ -14,15 +14,11 @@ import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import io.github.kfaryarok.android.MainActivity;
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.alerts.AlertHelper;
 import io.github.kfaryarok.android.alerts.BootReceiver;
@@ -38,12 +34,6 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    /**
-     * Used to tell the settings activity it's being used as a first launch activity.
-     * Will enable a menubar with a "v" button to save settings
-     */
-    public static final String FIRST_LAUNCH_INTENT = "io.github.kfaryarok.android.settings.FIRST_LAUNCH";
-
     private CheckBoxPreference alertsCb;
     private TimePreference timeAlertTp;
     private CheckBoxPreference globalAlertsCb;
@@ -51,12 +41,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private EditTextPreference updateServerEtp;
     private Preference resetAppBp;
     private CheckBoxPreference showAllCb;
-
-    /**
-     * This fragment is used to also let user configure the app on the first launch.
-     * Setting this to true causes the activity to have a tick button in the menu bar.
-     */
-    private boolean firstLaunch = false;
 
     private Toast toast;
 
@@ -67,9 +51,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         addPreferencesFromResource(R.xml.pref_kfaryarok);
         // add the menu bar
         setHasOptionsMenu(true);
-
-        // extract the first launch field from the intent
-        firstLaunch = getActivity().getIntent().getBooleanExtra(FIRST_LAUNCH_INTENT, false);
 
         // initiate everything
         alertsCb = (CheckBoxPreference) findPreference(getString(R.string.pref_alerts_enabled_bool));
@@ -206,34 +187,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         } else {
             super.onDisplayPreferenceDialog(preference);
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (firstLaunch) {
-            // first launch, so put the first launch menu
-            inflater.inflate(R.menu.first_launch, menu);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_firstlaunch_accept) {
-            // if there's a class stored in prefs already
-            if (!"".equals(PreferenceUtil.getClassPreference(getContext()))) {
-                // allow continuing
-                getActivity().finish();
-                // mark in preferences that first launch just finished
-                getPreferenceManager().getSharedPreferences().edit().putBoolean(getString(R.string.pref_launched_before_bool), true).apply();
-                // tell main activity that first launched just finished so recreate main activity
-                MainActivity.resumeFromFirstLaunch = true;
-            } else {
-                // else notify user
-                showToast(R.string.toast_firstlaunch_no_class);
-            }
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void showToast(@StringRes int resId) {
