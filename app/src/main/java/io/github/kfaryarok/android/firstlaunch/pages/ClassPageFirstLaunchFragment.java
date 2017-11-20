@@ -55,6 +55,8 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
     @BindView(R.id.rb_dialog_grade_l)
     public RadioButton lGradeRadioButton;
 
+    public boolean allowNextPage = false;
+
     @Override
     protected View onAbstractCreateView(View view) {
         ButterKnife.bind(this, view);
@@ -62,6 +64,9 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
         numPicker.setMinValue(1);
         numPicker.setMaxValue(11);
         numPicker.setWrapSelectorWheel(false);
+
+        // only enable it after user puts in data
+        // nextPageButton.setEnabled(false);
 
         LayoutUtil.setDirection(selectorInclude, LayoutUtil.RTL);
         LayoutUtil.setDirection(showAllCheckBox, LayoutUtil.RTL);
@@ -75,6 +80,11 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
             PreferenceUtil.prefs(getContext()).edit()
                     .putString(getString(R.string.pref_class_string), newGrade + classNum)
                     .apply();
+
+            // a grade is selected and is assumed can't be deselected (radio buttons)
+            // just enable going to the next page permanently
+            // nextPageButton.setEnabled(true);
+            allowNextPage = true;
         }));
 
         numPicker.setOnValueChangedListener(((picker, oldVal, newVal) -> {
@@ -98,11 +108,20 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
             PreferenceUtil.prefs(getContext()).edit()
                     .putBoolean(getString(R.string.pref_show_all_updates_bool), isChecked)
                     .apply();
+
+            // if this was selected, then allow going to the next page
+            // if it was deselected, then allow going to the next page ONLY if a grade is selected
+            // nextPageButton.setEnabled(isChecked || gradePicker.getCheckedRadioButtonId() != -1);
+            allowNextPage = isChecked || gradePicker.getCheckedRadioButtonId() != -1;
         }));
 
         nextPageButton.setOnClickListener((v) -> {
             FirstLaunchActivity act = (FirstLaunchActivity) getActivity();
-            act.viewPager.setCurrentItem(act.viewPager.getCurrentItem() + 1);
+            if (allowNextPage) {
+                act.viewPager.setCurrentItem(act.viewPager.getCurrentItem() + 1);
+            } else {
+                act.showToast(getString(R.string.toast_firstlaunch_no_class));
+            }
         });
 
         return view;
