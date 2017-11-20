@@ -1,11 +1,12 @@
 package io.github.kfaryarok.android.firstlaunch;
 
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,9 +18,11 @@ import io.github.kfaryarok.android.firstlaunch.pages.LastPageFirstLaunchFragment
 public class FirstLaunchActivity extends FragmentActivity {
 
     @BindView(R.id.vp_firstlaunch)
-    public ViewPager viewPager;
+    public FirstLaunchViewPager viewPager;
 
-    public FirstLaunchPagerAdapter adapterPager;
+    public PagerAdapter adapterPager;
+
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,7 @@ public class FirstLaunchActivity extends FragmentActivity {
 
         ButterKnife.bind(this);
 
-        adapterPager = new FirstLaunchPagerAdapter(getSupportFragmentManager());
+        adapterPager = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapterPager);
     }
 
@@ -40,7 +43,7 @@ public class FirstLaunchActivity extends FragmentActivity {
         }
     }
 
-    private class FirstLaunchPagerAdapter extends FragmentStatePagerAdapter {
+    private class PagerAdapter extends FragmentStatePagerAdapter {
 
         FirstLaunchPageFragment[] pages = {
                 new ClassPageFirstLaunchFragment(),
@@ -48,7 +51,7 @@ public class FirstLaunchActivity extends FragmentActivity {
                 new LastPageFirstLaunchFragment()
         };
 
-        public FirstLaunchPagerAdapter(FragmentManager fm) {
+        public PagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -61,6 +64,19 @@ public class FirstLaunchActivity extends FragmentActivity {
         public int getCount() {
             return 3;
         }
+
+    }
+
+    public void showToast(@StringRes int resId) {
+        showToast(getString(resId));
+    }
+
+    public void showToast(String text) {
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(this, text, Toast.LENGTH_LONG);
+        toast.show();
     }
 
 }
