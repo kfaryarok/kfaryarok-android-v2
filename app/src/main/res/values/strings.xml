@@ -1,7 +1,7 @@
 <resources>
     <!-- General strings -->
     <string name="app_name">KfarYarok-v2</string>
-    <string name="debug_string">placeholder</string>
+    <string name="debug_string" translatable="false">placeholder</string>
     <string name="global_update">הודעת מערכת</string>
 
     <!-- Activity strings -->
@@ -16,10 +16,10 @@
     <string name="menu_card_copytext">העתק הודעה</string>
 
     <!-- View strings -->
-    <string name="btn_devmode_easteregg">dev off</string>
+    <string name="btn_devmode_easteregg" translatable="false">dev off</string>
     <string name="cb_firstlaunch_alerts">הפעל התראות</string>
     <string name="btn_firstlaunch_timepicker">שעת התראה</string>
-    <string name="cb_firstlaunch_globalalerts">התריע על הודעות מערכת</string>
+    <string name="cb_firstlaunch_globalalerts">קבל התראות על הודעות מערכת</string>
     <string name="cb_dialog_class_showall">הצג הכל</string>
     <string name="tv_firstlaunch_page1_class_title">בחר כיתה</string>
     <string name="tv_firstlaunch_page2_alerts_title">הגדר התראות</string>
@@ -101,6 +101,6 @@
 
     <!-- Content description strings -->
     <string name="contentdesc_firstlaunch_page3_finish">finish setup</string>
-    <string name="contentdesc_nextpage">previous page</string>
+    <string name="contentdesc_nextpage">next page</string>
     <string name="contentdesc_prevpage">previous page</string>
 </resources>
