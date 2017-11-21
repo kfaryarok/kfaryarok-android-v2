@@ -70,46 +70,50 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/tv_firstlaunch_page2_alerts_toggle"
-        app:layout_constraintBottom_toTopOf="@+id/btn_firstlaunch_page2_alerts_timepicker"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_firstlaunch_page2_alerts_title"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002" />
 
     <CheckBox
         android:id="@+id/cb_firstlaunch_page2_alerts_global"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:text="@string/cb_firstlaunch_globalalerts"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_firstlaunch_page2_alerts_timeselected"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btn_firstlaunch_page2_alerts_timepicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/btn_firstlaunch_timepicker"
-        app:layout_constraintBottom_toTopOf="@+id/tv_firstlaunch_page2_alerts_timeselected"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cb_firstlaunch_page2_alerts_toggle" />
 
     <TextView
         android:id="@+id/tv_firstlaunch_page2_alerts_timeselected"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:text="@string/debug_string"
-        app:layout_constraintBottom_toTopOf="@+id/cb_firstlaunch_page2_alerts_global"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_firstlaunch_page2_alerts_timepicker" />
 </android.support.constraint.ConstraintLayout>
