@@ -40,6 +40,9 @@ public class FirstLaunchActivity extends FragmentActivity {
         if (viewPager.getCurrentItem() != 0) {
             // If it isn't the first page, make the back button go one page back
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        } else {
+            // if at the first page, exit app on pressing back button
+            finish();
         }
     }
 
