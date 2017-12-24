@@ -98,4 +98,13 @@ public class UpdateParser {
         return filteredUpdates.toArray(new Update[0]);
     }
 
+    /**
+     * Given a string, return a JSON string with the given string as a global update's text.
+     * @param updateText The text of the single global update
+     * @return Custom JSON string
+     */
+    public static String getSingleGlobalUpdateJSONString(String updateText) {
+        return String.format("{\"global_updates\":[],\"updates\":[{\"text\":\"%s\",\"classes\":\"\"}]}", updateText);
+    }
+
 }
