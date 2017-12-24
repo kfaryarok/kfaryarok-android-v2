@@ -158,11 +158,6 @@ public class AlertHelper {
     public static void showNotification(Context context, boolean show) {
         List<Update> updates = new ArrayList<>();
         UpdateHelper.getUpdatesReactively(context, false, updates::add, Functions.emptyConsumer(), () -> {
-            if (updates.isEmpty()) {
-                // error; stop
-                return;
-            }
-
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
             builder.setContentTitle(context.getString(R.string.alert_updates_title) + " (" + UpdateCache.getWhenLastCachedFormatted(context) + ")")
                     .setSmallIcon(R.mipmap.ic_launcher);
