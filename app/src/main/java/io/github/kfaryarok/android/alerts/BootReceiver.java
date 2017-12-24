@@ -32,9 +32,12 @@ public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (PreferenceUtil.getAlertEnabledPreference(context)) {
-            // reenable alert only if it's enabled in prefs
-            AlertHelper.enableAlert(context);
+        // make sure the intent is BOOT_COMPLETED
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            if (PreferenceUtil.getAlertEnabledPreference(context)) {
+                // reenable alert only if it's enabled in prefs
+                AlertHelper.enableAlert(context);
+            }
         }
     }
 
