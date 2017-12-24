@@ -25,10 +25,12 @@
     <string name="tv_firstlaunch_page2_alerts_title">הגדר התראות</string>
     <string name="btn_firstlaunch_page3_finish">סיום</string>
     <string name="tv_firstlaunch_page2_alerts_toggle">הפעל התראות</string>
+    <string name="tv_main_warning_outdated">ייתכן שהמידע לא מעודכן!</string>
+    <string name="tv_main_info">עודכן לאחרונה: טוען…</string>
 
     <!-- Used when some unrecoverable error during update loading occurred,
      and user needs to be notified of it -->
-    <string name="error_update_text">שגיאה (הודעה יותר מפורטת)</string>
+    <string name="error_update_text">כישלון בטעינת נתונים</string>
 
     <!-- Toast strings -->
     <string name="toast_card_copiedtext">טקסט הועתק</string>
