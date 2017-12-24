@@ -40,8 +40,6 @@ import io.github.kfaryarok.android.util.LayoutUtil;
 /**
  * Fragment for the TimePreference to show when clicked, and to have control of it.
  *
- * TODO: Find a way to let the user have no class selected and show all updates, regardless of class
- *
  * @author tbsc on 10/03/2017 (copied from v1)
  */
 public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat implements DialogPreference.TargetFragment {
