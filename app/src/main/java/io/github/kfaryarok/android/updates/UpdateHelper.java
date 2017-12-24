@@ -45,11 +45,12 @@ public class UpdateHelper {
     public static String DEFAULT_UPDATE_URL = "https://tbscdev.xyz/update.json";
 
     /**
-     * Does everything needed to get the updates, from fetching JSON from server to parsing and filtering.
+     * Does everything needed to get the updates, fetching JSON from server or cache, parsing, and filtering.
      */
-    public static void getUpdatesReactively(Context ctx, Consumer<? super Update> onNext, Consumer<? super Throwable> onError,
-                                      Action onComplete, Consumer<? super Disposable> onSubscribe) {
-        decideOnSource(ctx)
+    public static void getUpdatesReactively(Context ctx, boolean forceFetch,
+                                            Consumer<? super Update> onNext, Consumer<? super Throwable> onError,
+                                            Action onComplete, Consumer<? super Disposable> onSubscribe) {
+        decideOnSource(ctx, forceFetch)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 // parse updates from fetched data
@@ -59,45 +60,62 @@ public class UpdateHelper {
                 .subscribe(onNext, onError, onComplete, onSubscribe);
     }
 
-    private static Observable<String> decideOnSource(Context ctx) {
+    private static Observable<String> decideOnSource(Context ctx, boolean forceFetch) {
+        if (forceFetch) {
+            return networkSource(ctx, true);
+        }
+
         // if cache is newer than an hour, use it
         if (!UpdateCache.isCacheOlderThan1Hour(ctx)) {
             try {
+                // try using cache
                 return cacheSource(ctx);
             } catch (FileNotFoundException cacheException) {
+                // didn't work - no cache for some reason although it should be there
+                // use network
                 return networkSource(ctx, true);
             }
         } else {
+            // cache is older than an hour, use network
             return networkSource(ctx, true);
         }
     }
 
+    /**
+     * Provides an observable that will provide data from the cache.
+     * @param ctx Used to retrieve cache
+     * @return Observable cache
+     * @throws FileNotFoundException No cache exists
+     */
     private static Observable<String> cacheSource(Context ctx) throws FileNotFoundException {
         return Observable.just(UpdateCache.getUpdatesCache(ctx));
     }
 
+    /**
+     * Provides an observable that will provide data from the network.
+     * @param ctx Used to save to cache and get error messages
+     * @param saveToCache Whether or not to save the downloaded data to the cache
+     * @return Observable containing newly fetched data
+     */
     private static Observable<String> networkSource(Context ctx, boolean saveToCache) {
         return Observable.just(PreferenceUtil.getUpdateServerPreference(ctx))
                 .observeOn(Schedulers.io()) // fetch on IO thread
                 .map(NetworkUtil::downloadUsingInputStreamReader)
-                .defaultIfEmpty(ctx.getString(R.string.error_update_text))
+                // if we got nothing from the fetcher, return fake data detailing an error fetching
+                .filter(s -> s != null) // not going to use API 24+ methods, ignoring warning
+                .defaultIfEmpty(UpdateParser.getSingleGlobalUpdateJSONString(ctx.getString(R.string.error_update_text)))
                 .map(data -> {
                     // "fake" mapping - doing something with each value but returning the same value
                     // this saves to cache but doesn't change the data
                     if (saveToCache) {
-                        // save data to cache
-                        UpdateCache.setUpdatesCache(ctx, data);
+                        // don't save fake data to cache
+                        if (!UpdateParser.getSingleGlobalUpdateJSONString(ctx.getString(R.string.error_update_text)).equals(data)) {
+                            // save data to cache
+                            UpdateCache.setUpdatesCache(ctx, data);
+                        }
                     }
                     return data;
                 });
-    }
-
-    /**
-     * A JSON string that contains a fake update, detailing an error.
-     * @return fake error JSON string
-     */
-    public static String getFakeErrorUpdateJSON() {
-        return "{\"global_updates\":[],\"updates\":[{\"text\":\"<text here>\",\"classes\":\"\"}]}";
     }
 
     /**

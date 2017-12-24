@@ -23,6 +23,7 @@ import butterknife.ButterKnife;
 import io.github.kfaryarok.android.firstlaunch.FirstLaunchActivity;
 import io.github.kfaryarok.android.settings.SettingsActivity;
 import io.github.kfaryarok.android.updates.UpdateAdapter;
+import io.github.kfaryarok.android.updates.UpdateCache;
 import io.github.kfaryarok.android.updates.UpdateHelper;
 import io.github.kfaryarok.android.updates.api.Update;
 import io.github.kfaryarok.android.util.LayoutUtil;
@@ -53,7 +54,10 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
             adapterRecyclerView.addUpdate(update);
         }
     };
-    private Action completeConsumerStopRefresh = () -> swipeRefreshLayout.setRefreshing(false);
+    private Action completeConsumerStopRefresh = () -> {
+        swipeRefreshLayout.setRefreshing(false);
+        updateInfoTextView();
+    };
 
     public static boolean resumeFromFirstLaunch = false;
 
@@ -76,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
         swipeRefreshLayout.setOnRefreshListener(() -> {
             adapterRecyclerView.updates.clear();
             swipeRefreshLayout.setRefreshing(true);
-            UpdateHelper.getUpdatesReactively(this, nextConsumerAddToAdapter, Functions.emptyConsumer(),
+            UpdateHelper.getUpdatesReactively(this, true, nextConsumerAddToAdapter, Functions.emptyConsumer(),
                     completeConsumerStopRefresh, Functions.emptyConsumer());
         });
     }
@@ -98,9 +102,19 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
 
         adapterRecyclerView = new UpdateAdapter(this);
         swipeRefreshLayout.setRefreshing(true);
-        UpdateHelper.getUpdatesReactively(this, nextConsumerAddToAdapter, Functions.emptyConsumer(),
+        UpdateHelper.getUpdatesReactively(this, false, nextConsumerAddToAdapter, Functions.emptyConsumer(),
                 completeConsumerStopRefresh, Functions.emptyConsumer());
         recyclerViewUpdates.setAdapter(adapterRecyclerView);
+    }
+
+    private void updateInfoTextView() {
+        infoTextView.setText(String.format("עודכן לאחרונה: %s", UpdateCache.getWhenLastCachedFormatted(this)));
+
+        // if cached data is older than 3 hours tell user it might be outdated
+        if (UpdateCache.isCacheOlderThan3Hours(MainActivity.this)) {
+            warningTextView.setVisibility(View.VISIBLE);
+            warningTextView.setText(R.string.tv_main_warning_outdated);
+        }
     }
 
     @Override

@@ -149,7 +149,6 @@ public class AlertHelper {
     }
 
     /**
-     * TODO: Redesign how notifications work, since they are built for the old fetch/cache system.
      * Creates a notification containing updates.
      * This method fetches updates, parses them, filters them (based on prefs) and formats them
      * into a notification, with updates line-separated.
@@ -158,14 +157,13 @@ public class AlertHelper {
      */
     public static void showNotification(Context context, boolean show) {
         List<Update> updates = new ArrayList<>();
-        UpdateHelper.getUpdatesReactively(context, updates::add, Functions.emptyConsumer(), () -> {
+        UpdateHelper.getUpdatesReactively(context, false, updates::add, Functions.emptyConsumer(), () -> {
             if (updates.isEmpty()) {
                 // error; stop
                 return;
             }
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL);
-            // TODO: Cache isn't set-up so it will never show correct time - start caching!
             builder.setContentTitle(context.getString(R.string.alert_updates_title) + " (" + UpdateCache.getWhenLastCachedFormatted(context) + ")")
                     .setSmallIcon(R.mipmap.ic_launcher);
 
@@ -184,11 +182,11 @@ public class AlertHelper {
             }
 
             if (updates.size() == 0) {
-                inboxStyle.addLine("אין עדכונים");
+                inboxStyle.addLine("אין הודעות");
             }
 
             // give style to builder
-            inboxStyle.setBigContentTitle("עדכונים" + " (" + UpdateCache.getWhenLastCachedFormatted(context) + "):");
+            inboxStyle.setBigContentTitle("הודעות" + " (" + UpdateCache.getWhenLastCachedFormatted(context) + "):");
             builder.setStyle(inboxStyle);
 
             // create explicit intent to main activity
