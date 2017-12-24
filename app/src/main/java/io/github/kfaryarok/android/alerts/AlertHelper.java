@@ -22,8 +22,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -71,6 +73,14 @@ public class AlertHelper {
             registerChannel(ctx);
         }
 
+        // Tell the system that the receiver is enabled,
+        // and should stay enabled even after reboots.
+        ComponentName receiver = new ComponentName(ctx, BootReceiver.class);
+        PackageManager pm = ctx.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
         String alertTime = PreferenceUtil.getAlertTimePreference(ctx);
         int alertHour = TimePreference.parseHour(alertTime);
         int alertMinute = TimePreference.parseMinute(alertTime);
@@ -101,6 +111,14 @@ public class AlertHelper {
     public static void disableAlert(Context ctx) {
         initiateFields(ctx);
 
+        // Tell the system that the receiver is disabled,
+        // and should no longer stay enabled after reboots.
+        ComponentName receiver = new ComponentName(ctx, BootReceiver.class);
+        PackageManager pm = ctx.getPackageManager();
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
         alarmManager.cancel(pendingAlertReceiver);
     }
 
@@ -116,6 +134,19 @@ public class AlertHelper {
         if (pendingAlertReceiver == null) {
             // init pendingintent if null
             pendingAlertReceiver = createIntent(ctx);
+        }
+    }
+
+    /**
+     * Small utility method for easily toggling the alert state
+     * @param ctx Application context
+     * @param state What should happen to the alert state - true for enabled, false for disabled
+     */
+    public static void toggleAlert(Context ctx, boolean state) {
+        if (state) {
+            enableAlert(ctx);
+        } else {
+            disableAlert(ctx);
         }
     }
 

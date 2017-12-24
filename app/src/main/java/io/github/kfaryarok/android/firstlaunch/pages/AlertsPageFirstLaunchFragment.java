@@ -1,9 +1,7 @@
 package io.github.kfaryarok.android.firstlaunch.pages;
 
 import android.app.TimePickerDialog;
-import android.content.ComponentName;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,7 +12,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.alerts.AlertHelper;
-import io.github.kfaryarok.android.alerts.BootReceiver;
 import io.github.kfaryarok.android.firstlaunch.FirstLaunchActivity;
 import io.github.kfaryarok.android.firstlaunch.FirstLaunchPageFragment;
 import io.github.kfaryarok.android.settings.prefs.TimePreference;
@@ -66,21 +63,7 @@ public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
                     .putBoolean(getString(R.string.pref_alerts_enabled_bool), isChecked)
                     .apply();
 
-            ComponentName receiver = new ComponentName(getContext(), BootReceiver.class);
-            PackageManager pm = getContext().getPackageManager();
-            if (isChecked) {
-                // alerts are enabled, enable alert and boot receiver
-                AlertHelper.enableAlert(getContext());
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
-            } else {
-                // alerts are disabled, disable alert and boot receiver
-                AlertHelper.disableAlert(getContext());
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
-            }
+            AlertHelper.toggleAlert(getContext(), isChecked);
         });
 
         timePickerButton.setOnClickListener(button -> {
@@ -102,10 +85,12 @@ public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
         selectedTimeTextView.setText(PreferenceUtil.getAlertTimePreference(getContext()));
 
-        globalToggleCheckBox.setOnCheckedChangeListener((buttonView, isChecked) ->
-                PreferenceUtil.prefs(getContext()).edit()
-                .putBoolean(getString(R.string.pref_globalalerts_enabled_bool), isChecked)
-                .apply());
+        globalToggleCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            PreferenceUtil.prefs(getContext()).edit()
+                    .putBoolean(getString(R.string.pref_globalalerts_enabled_bool), isChecked)
+                    .apply();
+            AlertHelper.enableAlert(getContext());
+        });
 
         previousPageButton.setOnClickListener((v) -> {
             FirstLaunchActivity act = (FirstLaunchActivity) getActivity();

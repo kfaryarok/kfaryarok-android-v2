@@ -3,9 +3,7 @@ package io.github.kfaryarok.android.settings;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.ComponentName;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.app.DialogFragment;
@@ -21,7 +19,6 @@ import java.net.URL;
 
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.alerts.AlertHelper;
-import io.github.kfaryarok.android.alerts.BootReceiver;
 import io.github.kfaryarok.android.settings.prefs.ClassPreference;
 import io.github.kfaryarok.android.settings.prefs.ClassPreferenceDialogFragmentCompat;
 import io.github.kfaryarok.android.settings.prefs.TimePreference;
@@ -68,29 +65,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         classCd.setEnabled(!PreferenceUtil.getShowAllUpdatesPreference(getContext()));
 
         alertsCb.setOnPreferenceChangeListener((preference, newValue) -> {
-            ComponentName receiver = new ComponentName(getContext(), BootReceiver.class);
-            PackageManager pm = getContext().getPackageManager();
             boolean newBool = (boolean) newValue;
 
-            // I FOUND OUT WHAT THE PACKAGEMANAGER CALL DOES!
-            // It tells the system that the receiver is enabled,
-            // and should stay enabled even after reboots.
-            if (newBool) {
-                // alerts are enabled, enable alert and boot receiver
-                AlertHelper.enableAlert(getContext());
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                        PackageManager.DONT_KILL_APP);
-            } else {
-                // alerts are disabled, disable alert and boot receiver
-                AlertHelper.disableAlert(getContext());
-                pm.setComponentEnabledSetting(receiver,
-                        PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                        PackageManager.DONT_KILL_APP);
-            }
+            AlertHelper.toggleAlert(getContext(), newBool);
 
             timeAlertTp.setEnabled(newBool);
             globalAlertsCb.setEnabled(newBool);
+
+            return true;
+        });
+
+        timeAlertTp.setOnPreferenceChangeListener((preference, newValue) -> {
+            // Update alert by re-enabling it
+            AlertHelper.enableAlert(getContext());
+
+            return true;
+        });
+
+        globalAlertsCb.setOnPreferenceChangeListener((preference, newValue) -> {
+            // Update alert by re-enabling it
+            AlertHelper.enableAlert(getContext());
+
             return true;
         });
 
