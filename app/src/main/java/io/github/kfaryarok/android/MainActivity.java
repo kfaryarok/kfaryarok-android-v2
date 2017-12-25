@@ -3,6 +3,7 @@ package io.github.kfaryarok.android;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.kfaryarok.android.alerts.BootReceiver;
 import io.github.kfaryarok.android.firstlaunch.FirstLaunchActivity;
 import io.github.kfaryarok.android.settings.SettingsActivity;
 import io.github.kfaryarok.android.updates.UpdateAdapter;
@@ -65,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
     protected void onCreate(Bundle savedInstanceState) {
         // registering implicit receivers in API 26 can only be done programmatically
         // TODO: Figure this out completely
-        // registerReceiver(bootReceiver = new BootReceiver(), new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
+        registerReceiver(new BootReceiver(), new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
