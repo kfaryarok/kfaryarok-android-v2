@@ -23,6 +23,8 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
  * The first page of the app's setup wizard.
  * Lets user either select a class or set the app to show all updates.
  *
+ * TODO: Explain a bit more about the class selection and what it means
+ *
  * @author tbsc on 17/11/2017
  */
 public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {

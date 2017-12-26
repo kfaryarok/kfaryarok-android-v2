@@ -39,6 +39,7 @@ import io.github.kfaryarok.android.util.LayoutUtil;
 
 /**
  * Fragment for the TimePreference to show when clicked, and to have control of it.
+ * TODO: Figure out a way to have the grade picker look like the number picker
  *
  * @author tbsc on 10/03/2017 (copied from v1)
  */

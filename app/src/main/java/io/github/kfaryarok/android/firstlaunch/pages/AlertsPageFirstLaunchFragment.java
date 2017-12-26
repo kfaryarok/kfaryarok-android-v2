@@ -21,6 +21,7 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
 /**
  * Second page of the setup wizard.
  * Here the user configures the alerts - time, what to show, if to show at all.
+ * TODO: Add more explanation about what alerts are
  *
  * @author tbsc on 17/11/2017
  */
