@@ -31,7 +31,7 @@ public class NetworkUtil {
      * @return Contents of the file at the specified URL, or nothing, or null
      * @throws IOException If anything wrong happened during connection
      */
-    public static String downloadUsingInputStreamReader(URL url) throws IOException {
+    public static String downloadUsingInputStreamReader(URL url) {
         if (url == null) {
             return "";
         }
@@ -66,10 +66,18 @@ public class NetworkUtil {
                 }
                 result = builder.toString();
             }
+        } catch (IOException e) {
+            // connection timed out, return null
+            return null;
         } finally {
             // Close Stream and disconnect HTTPS connection.
             if (stream != null) {
-                stream.close();
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    // failed closing stream
+                    e.printStackTrace();
+                }
             }
             if (connection != null) {
                 connection.disconnect();

@@ -33,7 +33,7 @@ import io.github.kfaryarok.android.updates.api.UpdateImpl;
  * Takes the JSON string, parses it and returns an array of updates.
  * For information about how the JSON should be constructed, see JSONDATA.md.
  *
- * @author tbsc on 04/03/2017
+ * @author tbsc on 04/03/2017 (copied from v1)
  */
 public class UpdateParser {
 
@@ -96,6 +96,15 @@ public class UpdateParser {
         }
 
         return filteredUpdates.toArray(new Update[0]);
+    }
+
+    /**
+     * Given a string, return a JSON string with the given string as a global update's text.
+     * @param updateText The text of the single global update
+     * @return Custom JSON string
+     */
+    public static String getSingleGlobalUpdateJSONString(String updateText) {
+        return String.format("{\"global_updates\":[],\"updates\":[{\"text\":\"%s\",\"classes\":\"\"}]}", updateText);
     }
 
 }

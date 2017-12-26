@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="io.github.kfaryarok.android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Needed for fetching updates -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Needed to reconfigure alert after boot (alerts are deleted on shutdown) -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:allowBackup="true"
@@ -18,6 +21,36 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/menu_about"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/act_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+        <activity
+            android:name=".firstlaunch.FirstLaunchActivity"
+            android:label="@string/act_firstlaunch">
+        </activity>
+        <receiver
+            android:name=".alerts.BootReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".alerts.AlertReceiver"
+            android:enabled="true"/>
     </application>
 
 </manifest>

@@ -19,13 +19,21 @@ package io.github.kfaryarok.android.updates;
 
 import android.content.Context;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.updates.api.ClassesAffected;
 import io.github.kfaryarok.android.updates.api.Update;
+import io.github.kfaryarok.android.util.NetworkUtil;
 import io.github.kfaryarok.android.util.PreferenceUtil;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Various utility methods for working with updates.
@@ -35,6 +43,80 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
 public class UpdateHelper {
 
     public static String DEFAULT_UPDATE_URL = "https://tbscdev.xyz/update.json";
+
+    /**
+     * Does everything needed to get the updates, fetching JSON from server or cache, parsing, and filtering.
+     */
+    public static void getUpdatesReactively(Context ctx, boolean forceFetch,
+                                            Consumer<? super Update> onNext, Consumer<? super Throwable> onError,
+                                            Action onComplete, Consumer<? super Disposable> onSubscribe) {
+        decideOnSource(ctx, forceFetch)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                // parse updates from fetched data
+                .flatMap(data -> Observable.fromArray(UpdateParser.parseUpdates(data)))
+                // filter out irrelevant stuff
+                .filter(update -> update.getAffected().affects(PreferenceUtil.getClassPreference(ctx)))
+                .subscribe(onNext, onError, onComplete, onSubscribe);
+    }
+
+    private static Observable<String> decideOnSource(Context ctx, boolean forceFetch) {
+        if (forceFetch) {
+            return networkSource(ctx, true);
+        }
+
+        // if cache is newer than an hour, use it
+        if (!UpdateCache.isCacheOlderThan1Hour(ctx)) {
+            try {
+                // try using cache
+                return cacheSource(ctx);
+            } catch (FileNotFoundException cacheException) {
+                // didn't work - no cache for some reason although it should be there
+                // use network
+                return networkSource(ctx, true);
+            }
+        } else {
+            // cache is older than an hour, use network
+            return networkSource(ctx, true);
+        }
+    }
+
+    /**
+     * Provides an observable that will provide data from the cache.
+     * @param ctx Used to retrieve cache
+     * @return Observable cache
+     * @throws FileNotFoundException No cache exists
+     */
+    private static Observable<String> cacheSource(Context ctx) throws FileNotFoundException {
+        return Observable.just(UpdateCache.getUpdatesCache(ctx));
+    }
+
+    /**
+     * Provides an observable that will provide data from the network.
+     * @param ctx Used to save to cache and get error messages
+     * @param saveToCache Whether or not to save the downloaded data to the cache
+     * @return Observable containing newly fetched data
+     */
+    private static Observable<String> networkSource(Context ctx, boolean saveToCache) {
+        return Observable.just(PreferenceUtil.getUpdateServerPreference(ctx))
+                .observeOn(Schedulers.io()) // fetch on IO thread
+                .map(NetworkUtil::downloadUsingInputStreamReader)
+                // if we got nothing from the fetcher, return fake data detailing an error fetching
+                .filter(s -> s != null) // not going to use API 24+ methods, ignoring warning
+                .defaultIfEmpty(UpdateParser.getSingleGlobalUpdateJSONString(ctx.getString(R.string.error_update_text)))
+                .map(data -> {
+                    // "fake" mapping - doing something with each value but returning the same value
+                    // this saves to cache but doesn't change the data
+                    if (saveToCache) {
+                        // don't save fake data to cache
+                        if (!UpdateParser.getSingleGlobalUpdateJSONString(ctx.getString(R.string.error_update_text)).equals(data)) {
+                            // save data to cache
+                            UpdateCache.setUpdatesCache(ctx, data);
+                        }
+                    }
+                    return data;
+                });
+    }
 
     /**
      * Creates a string of the classes in the array, with the user's current class first and
@@ -53,10 +135,11 @@ public class UpdateHelper {
      * @return Class array in string form, comma-separated.
      */
     public static String formatClassString(String[] classes, String userClass) {
-        if (classes == null || classes.length == 0 || userClass == null || userClass.length() == 0) {
+        if (classes == null || classes.length == 0) {
             // if anything is invalid just return null
             return null;
         }
+
         // string builder for creating the class string
         StringBuilder classBuilder = new StringBuilder();
 
@@ -64,15 +147,20 @@ public class UpdateHelper {
         ArrayList<String> classList = new ArrayList<>();
         Collections.addAll(classList, classes);
 
+        boolean firstElementRemoved = false;
+
         if (classList.contains(userClass)) {
             // don't assume about user class, first check if it's even there
             classBuilder.append(userClass);
             classList.remove(userClass);
+            firstElementRemoved = true;
         }
 
         if (!classList.isEmpty()) {
-            // there are more classes, put a comma
-            classBuilder.append(", ");
+            if (firstElementRemoved) {
+                // there are more classes, put a comma
+                classBuilder.append(", ");
+            }
 
             for (int i = 0; i < classList.size(); i++) {
                 // put the class

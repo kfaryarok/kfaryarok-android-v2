@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    <EditTextPreference
+        android:key="@string/pref_class_string"
+        android:selectAllOnFocus="true"
+        android:title="@string/settings_class" />-->
+
+    <io.github.kfaryarok.android.settings.prefs.ClassPreference
+        android:key="@string/pref_class_string"
+        android:title="@string/settings_class" />
+
+    <CheckBoxPreference
+        android:key="@string/pref_show_all_updates_bool"
+        android:title="@string/settings_show_all_updates"
+        android:defaultValue="false" />
+
+    <android.support.v7.preference.PreferenceCategory
+        android:key="@string/settings_alerts_category"
+        android:title="@string/settings_alertcategory_title" >
+
+        <CheckBoxPreference
+            android:title="@string/settings_alertcategory_enabled"
+            android:key="@string/pref_alerts_enabled_bool"
+            android:defaultValue="true" />
+
+        <io.github.kfaryarok.android.settings.prefs.TimePreference
+            android:key="@string/pref_alerts_time_string"
+            android:title="@string/btn_firstlaunch_timepicker"
+            android:defaultValue="@string/pref_alerts_time_string_def"
+            android:summary="@string/debug_string" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_globalalerts_enabled_bool"
+            android:title="@string/cb_firstlaunch_globalalerts" />
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory
+        android:key="@string/settings_advanced_category"
+        android:title="@string/settings_advancedcategory_title">
+
+        <EditTextPreference
+            android:title="@string/settings_advancedcategory_server"
+            android:key="@string/pref_updateserver_string" />
+        <Preference
+            android:title="@string/settings_advancedcategory_reset"
+            android:summary="@string/settings_advancedcategory_reset_summary"
+            android:key="@string/pref_reset_bool" />
+    </android.support.v7.preference.PreferenceCategory>
+</android.support.v7.preference.PreferenceScreen>
