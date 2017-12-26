@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import io.github.kfaryarok.android.util.LayoutUtil;
 
 /**
- * @authon tbsc on 16/11/2017 (but pretty much the same as v1)
+ * @author tbsc on 16/11/2017 (but pretty much the same as v1)
  */
 public class AboutActivity extends AppCompatActivity {
 
