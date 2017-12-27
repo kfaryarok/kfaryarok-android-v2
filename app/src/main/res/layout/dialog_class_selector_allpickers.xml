@@ -6,8 +6,16 @@
     android:layout_height="wrap_content"
     android:gravity="center">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+        <requestFocus />
+    </View>
+
     <io.github.kfaryarok.android.settings.prefs.GradePicker
-        android:id="@+id/gp_dialog_class_grade"
+        android:id="@+id/gp_dialog_grade"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginRight="40dp"

@@ -45,7 +45,8 @@ import io.github.kfaryarok.android.util.LayoutUtil;
  */
 public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat implements DialogPreference.TargetFragment {
 
-    RadioGroup gradeRadioGroup;
+    GradePicker gradePicker;
+//    RadioGroup gradeRadioGroup;
     NumberPicker classNumPicker;
     // CheckBox showAllCheckBox;
     LinearLayout selectorLinearLayout;
@@ -71,19 +72,28 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
     protected void onBindDialogView(View v) {
         super.onBindDialogView(v);
 
-        gradeRadioGroup = v.findViewById(R.id.rg_dialog_grade);
+        gradePicker = v.findViewById(R.id.gp_dialog_grade);
+//        gradeRadioGroup = v.findViewById(R.id.rg_dialog_grade);
         classNumPicker = v.findViewById(R.id.np_dialog_class_num);
         // showAllCheckBox = v.findViewById(R.id.cb_dialog_class_showall);
         selectorLinearLayout = v.findViewById(R.id.ll_dialog_class_selectors);
         final ClassPreference pref = (ClassPreference) getPreference();
 
-        // set options and set current selected entries
-        gradeRadioGroup.check(convertGradeStringToRadioButtonRes(pref.grade));
-        // used to change the number picker's max value based on the selected grade
-        gradeRadioGroup.setOnCheckedChangeListener(
-                (group, checkedId) ->
-                        classNumPicker.setMaxValue(ClassUtil.getClassesInHebrewGrade(convertGradeRadioButtonResToString(getContext(), checkedId)))
-        );
+//        // set options and set current selected entries
+//        gradeRadioGroup.check(convertGradeStringToRadioButtonRes(pref.grade));
+//        // used to change the number picker's max value based on the selected grade
+//        gradeRadioGroup.setOnCheckedChangeListener(
+//                (group, checkedId) ->
+//                        classNumPicker.setMaxValue(ClassUtil.getClassesInHebrewGrade(convertGradeRadioButtonResToString(getContext(), checkedId)))
+//        );
+
+        GradePicker.fixFormatting(gradePicker);
+
+        gradePicker.setValue(convertGradeStringToGradePickerValue(pref.grade));
+        gradePicker.setOnValueChangedListener(
+                (picker, oldVal, newVal) ->
+                        classNumPicker.setMaxValue(ClassUtil.getClassesInHebrewGrade(convertGradePickerValueToString(getContext(), newVal))));
+
         classNumPicker.setMinValue(1);
         classNumPicker.setMaxValue(ClassUtil.getClassesInHebrewGrade(pref.grade));
         classNumPicker.setWrapSelectorWheel(false);
@@ -97,27 +107,12 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
             ClassPreference pref = (ClassPreference) getPreference();
-            @IdRes int gradeRes = gradeRadioGroup.getCheckedRadioButtonId();
-            String grade = convertGradeRadioButtonResToString(getContext(), gradeRes);
+//            @IdRes int gradeRes = gradeRadioGroup.getCheckedRadioButtonId();
+//            String grade = convertGradeRadioButtonResToString(getContext(), gradeRes);
+            String grade = convertGradePickerValueToString(getContext(), gradePicker.getValue());
             int classNum = classNumPicker.getValue();
             pref.setClass(grade, classNum);
             pref.setSummary(grade + classNum);
-        }
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        if (gradeRadioGroup.getCheckedRadioButtonId() == -1) {
-            // a radio button ID of -1 means nothing is selected
-            // notify user he needs to enter a grade too
-            if (toast != null) {
-                toast.cancel();
-            }
-            toast = Toast.makeText(getContext(), getString(R.string.toast_class_selector_nograde_selected), Toast.LENGTH_LONG);
-            toast.show();
-        } else {
-            // let user exit only if he entered a grade
-            super.onDismiss(dialog);
         }
     }
 
@@ -203,6 +198,53 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
                 return R.id.rb_dialog_grade_l;
             default:
                 return -1;
+        }
+    }
+
+    public static int convertGradeStringToGradePickerValue(String grade) {
+        if (grade == null || grade.length() == 0) {
+            return -1;
+        }
+
+        if (!ClassUtil.isValidHebrewGrade(grade)) {
+            return -1;
+        }
+
+        switch (grade) {
+            case "ז":
+                return 7;
+            case "ח":
+                return 8;
+            case "ט":
+                return 9;
+            case "י":
+                return 10;
+            case "יא":
+                return 11;
+            case "יב":
+                return 12;
+            default:
+                return -1;
+        }
+    }
+
+    @Nullable
+    public static String convertGradePickerValueToString(Context ctx, int gradeNum) {
+        switch (gradeNum) {
+            case 7:
+                return ctx.getString(R.string.grade_g);
+            case 8:
+                return ctx.getString(R.string.grade_h);
+            case 9:
+                return ctx.getString(R.string.grade_i);
+            case 10:
+                return ctx.getString(R.string.grade_j);
+            case 11:
+                return ctx.getString(R.string.grade_k);
+            case 12:
+                return ctx.getString(R.string.grade_l);
+            default:
+                return null;
         }
     }
 
