@@ -1,13 +1,12 @@
 package io.github.kfaryarok.android.settings.prefs;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.text.InputFilter;
 import android.util.AttributeSet;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 
 /**
  * Extension of NumberPicker for picking grades.
@@ -32,18 +31,29 @@ public class GradePicker extends NumberPicker {
      */
     public static void fixFormatting(GradePicker picker) {
         try {
-            Method method = picker.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
-            method.setAccessible(true);
-            method.invoke(picker, true);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
+            Field f = NumberPicker.class.getDeclaredField("mInputText");
+            f.setAccessible(true);
+            EditText inputText = (EditText) f.get(picker);
+            inputText.setFilters(new InputFilter[0]);
+        } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
         }
+        // doesn't work
+//        try {
+//            Method method = picker.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
+//            method.setAccessible(true);
+//            method.invoke(picker, true);
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        } catch (IllegalArgumentException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        } catch (InvocationTargetException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }
