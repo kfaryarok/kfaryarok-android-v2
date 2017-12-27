@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_dialog_class_selectors"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <io.github.kfaryarok.android.settings.prefs.GradePicker
+        android:id="@+id/gp_dialog_class_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
+        android:gravity="center"
+        android:theme="@style/ClassPicker"/>
+
+    <View
+        android:id="@+id/view_dialog_class_divider"
+        android:layout_width="1dp"
+        android:layout_height="230dp"
+        android:background="#E0E0E0"
+        android:layout_gravity="center"/>
+
+    <NumberPicker
+        android:id="@+id/np_dialog_class_num"
+        android:layout_width="71dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_gravity="center"
+        android:theme="@style/ClassPicker"/>
+
+</LinearLayout>
+
+    <!--<CheckBox-->
+    <!--android:id="@+id/cb_dialog_class_showall"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:text="@string/cb_dialog_class_showall"/>-->
