@@ -63,6 +63,14 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
 
     public static boolean resumeFromFirstLaunch = false;
 
+    /**
+     * This is a little trick to prevent too many refreshes.
+     * If it's the first refresh, actually fetch.
+     * If it's the third refresh, actually fetch too.
+     * After that only fetch every fifth refresh.
+     */
+    private int refreshCount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // registering implicit receivers in API 26 can only be done programmatically
@@ -82,8 +90,11 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
         swipeRefreshLayout.setOnRefreshListener(() -> {
             adapterRecyclerView.updates.clear();
             swipeRefreshLayout.setRefreshing(true);
-            UpdateHelper.getUpdatesReactively(this, true, nextConsumerAddToAdapter, Functions.emptyConsumer(),
+            UpdateHelper.getUpdatesReactively(this,
+                    refreshCount == 0 || refreshCount == 2 || refreshCount % 5 == 0,
+                    nextConsumerAddToAdapter, Functions.emptyConsumer(),
                     completeConsumerStopRefresh, Functions.emptyConsumer());
+            refreshCount++;
         });
     }
 
