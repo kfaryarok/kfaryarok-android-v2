@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/btn_firstlaunch_page2_next"
+    <Button
+        android:id="@+id/btn_firstlaunch_page_alerts_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -15,18 +15,21 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_navigate_next_black_24dp"
+        android:contentDescription="@string/contentdesc_nextpage"
+        android:drawableEnd="@drawable/ic_navigate_next_black_24dp"
+        android:drawableRight="@drawable/ic_navigate_next_black_24dp"
+        android:padding="6dp"
+        android:text="@string/btn_firstlaunch_to_page_last"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.976"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"
-        android:contentDescription="@string/contentdesc_nextpage"
-        android:padding="6dp" />
+        app:layout_constraintVertical_bias="0.98"/>
 
-    <ImageButton
-        android:id="@+id/btn_firstlaunch_page2_previous"
+    <Button
+        android:id="@+id/btn_firstlaunch_page_alerts_previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -34,18 +37,21 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_navigate_before_black_24dp"
+        android:contentDescription="@string/contentdesc_prevpage"
+        android:drawableLeft="@drawable/ic_navigate_before_black_24dp"
+        android:drawableStart="@drawable/ic_navigate_before_black_24dp"
+        android:padding="6dp"
+        android:text="@string/btn_firstlaunch_to_page_class"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"
-        android:contentDescription="@string/contentdesc_prevpage"
-        android:padding="6dp" />
+        app:layout_constraintVertical_bias="0.98"/>
 
     <TextView
-        android:id="@+id/tv_firstlaunch_page2_alerts_title"
+        android:id="@+id/tv_firstlaunch_page_alerts_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -62,7 +68,7 @@
         app:layout_constraintVertical_bias="0.06999999"/>
 
     <CheckBox
-        android:id="@+id/cb_firstlaunch_page2_alerts_toggle"
+        android:id="@+id/cb_firstlaunch_page_alerts_toggle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
@@ -80,7 +86,7 @@
         android:layout_marginLeft="8dp"/>
 
     <CheckBox
-        android:id="@+id/cb_firstlaunch_page2_alerts_global"
+        android:id="@+id/cb_firstlaunch_page_alerts_global"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -92,13 +98,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_firstlaunch_page2_alerts_timeselected"
+        app:layout_constraintTop_toBottomOf="@+id/tv_firstlaunch_page_alerts_timeselected"
         app:layout_constraintVertical_bias="0.0"
         android:layout_marginRight="20dp"
         android:layout_marginLeft="8dp"/>
 
     <Button
-        android:id="@+id/btn_firstlaunch_page2_alerts_timepicker"
+        android:id="@+id/btn_firstlaunch_page_alerts_timepicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -107,10 +113,10 @@
         android:text="@string/btn_firstlaunch_timepicker"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_firstlaunch_page2_alerts_toggle" />
+        app:layout_constraintTop_toBottomOf="@+id/cb_firstlaunch_page_alerts_toggle" />
 
     <TextView
-        android:id="@+id/tv_firstlaunch_page2_alerts_timeselected"
+        android:id="@+id/tv_firstlaunch_page_alerts_timeselected"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
@@ -119,5 +125,5 @@
         android:text="@string/debug_string"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_firstlaunch_page2_alerts_timepicker" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_firstlaunch_page_alerts_timepicker" />
 </android.support.constraint.ConstraintLayout>

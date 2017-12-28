@@ -1,6 +1,7 @@
 package io.github.kfaryarok.android.firstlaunch.pages;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import butterknife.BindView;
@@ -16,11 +17,11 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
  */
 public class LastPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
-    @BindView(R.id.btn_firstlaunch_page3_finish)
+    @BindView(R.id.btn_firstlaunch_page_last_finish)
     public ImageButton finishButton;
 
-    @BindView(R.id.btn_firstlaunch_page3_previous)
-    public ImageButton previousPageButton;
+    @BindView(R.id.btn_firstlaunch_page_last_previous)
+    public Button previousPageButton;
 
     @Override
     protected View onAbstractCreateView(View view) {
@@ -47,7 +48,7 @@ public class LastPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
     @Override
     protected int getLayout() {
-        return R.layout.fragment_first_launch_page3;
+        return R.layout.fragment_first_launch_page_last;
     }
 
 }

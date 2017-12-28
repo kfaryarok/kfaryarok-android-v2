@@ -1,5 +1,6 @@
 package io.github.kfaryarok.android.firstlaunch;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -9,7 +10,7 @@ import android.support.v4.view.ViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 
 import io.github.kfaryarok.android.R;
 
@@ -41,13 +42,21 @@ public abstract class FirstLaunchPageFragment extends Fragment {
      * @param previous The previous page button, if there is one
      * @param next The next page button, if there is one
      */
-    protected void flipNavigationButtons(@Nullable ImageButton previous, @Nullable ImageButton next) {
+    protected void flipNavigationButtons(@Nullable Button previous, @Nullable Button next) {
         if (ViewCompat.getLayoutDirection(getActivity().getWindow().getDecorView()) == ViewCompat.LAYOUT_DIRECTION_RTL) {
             if (previous != null) {
-                previous.setImageResource(R.drawable.ic_navigate_next_black_24dp);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    previous.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_navigate_next_black_24dp, 0, 0, 0);
+                } else {
+                    previous.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_navigate_next_black_24dp, 0, 0, 0);
+                }
             }
             if (next != null) {
-                next.setImageResource(R.drawable.ic_navigate_before_black_24dp);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    next.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_navigate_before_black_24dp, 0);
+                } else {
+                    next.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_navigate_before_black_24dp, 0);
+                }
             }
         }
     }

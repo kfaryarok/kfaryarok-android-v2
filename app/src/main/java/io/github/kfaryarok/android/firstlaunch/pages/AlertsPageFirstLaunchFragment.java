@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -27,23 +26,23 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
  */
 public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
-    @BindView(R.id.cb_firstlaunch_page2_alerts_toggle)
+    @BindView(R.id.cb_firstlaunch_page_alerts_toggle)
     public CheckBox toggleCheckBox;
 
-    @BindView(R.id.btn_firstlaunch_page2_alerts_timepicker)
+    @BindView(R.id.btn_firstlaunch_page_alerts_timepicker)
     public Button timePickerButton;
 
-    @BindView(R.id.tv_firstlaunch_page2_alerts_timeselected)
+    @BindView(R.id.tv_firstlaunch_page_alerts_timeselected)
     public TextView selectedTimeTextView;
 
-    @BindView(R.id.cb_firstlaunch_page2_alerts_global)
+    @BindView(R.id.cb_firstlaunch_page_alerts_global)
     public CheckBox globalToggleCheckBox;
 
-    @BindView(R.id.btn_firstlaunch_page2_previous)
-    public ImageButton previousPageButton;
+    @BindView(R.id.btn_firstlaunch_page_alerts_previous)
+    public Button previousPageButton;
 
-    @BindView(R.id.btn_firstlaunch_page2_next)
-    public ImageButton nextPageButton;
+    @BindView(R.id.btn_firstlaunch_page_alerts_next)
+    public Button nextPageButton;
 
     @Override
     protected View onAbstractCreateView(View view) {
@@ -109,7 +108,7 @@ public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
     @Override
     protected int getLayout() {
-        return R.layout.fragment_first_launch_page2_alerts;
+        return R.layout.fragment_first_launch_page_alerts;
     }
 
 }

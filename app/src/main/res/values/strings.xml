@@ -27,6 +27,10 @@
     <string name="tv_firstlaunch_page2_alerts_toggle">הפעל התראות</string>
     <string name="tv_main_warning_outdated">ייתכן שהמידע לא מעודכן!</string>
     <string name="tv_main_info">עודכן לאחרונה: טוען…</string>
+    <string name="btn_firstlaunch_to_page_start">התחלה</string>
+    <string name="btn_firstlaunch_to_page_alerts">התראות</string>
+    <string name="btn_firstlaunch_to_page_class">כיתה</string>
+    <string name="btn_firstlaunch_to_page_last">סיום</string>
 
     <!-- Used when some unrecoverable error during update loading occurred,
      and user needs to be notified of it -->

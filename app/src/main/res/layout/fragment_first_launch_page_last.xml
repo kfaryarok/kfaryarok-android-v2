@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageButton
-        android:id="@+id/btn_firstlaunch_page3_previous"
+    <Button
+        android:id="@+id/btn_firstlaunch_page_last_previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -15,37 +15,39 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_navigate_before_black_24dp"
+        android:contentDescription="@string/contentdesc_nextpage"
+        android:drawableLeft="@drawable/ic_navigate_before_black_24dp"
+        android:drawableStart="@drawable/ic_navigate_before_black_24dp"
+        android:padding="6dp"
+        android:text="@string/btn_firstlaunch_to_page_alerts"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"
-        android:contentDescription="@string/contentdesc_nextpage"
-        android:padding="6dp" />
+        app:layout_constraintVertical_bias="0.98"/>
 
     <ImageButton
-        android:id="@+id/btn_firstlaunch_page3_finish"
+        android:id="@+id/btn_firstlaunch_page_last_finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="12dp"
         android:layout_marginStart="8dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/contentdesc_firstlaunch_page3_finish"
+        android:padding="4dp"
         android:scaleX="1.5"
         android:scaleY="1.5"
         android:src="@drawable/ic_check_black_24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_firstlaunch_page_last_previous"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"
-        android:padding="4dp" />
+        app:layout_constraintTop_toTopOf="@+id/btn_firstlaunch_page_last_previous"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="8dp"/>
 
 </android.support.constraint.ConstraintLayout>

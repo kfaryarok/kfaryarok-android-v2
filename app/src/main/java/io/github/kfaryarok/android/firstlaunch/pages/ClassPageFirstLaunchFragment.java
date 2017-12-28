@@ -1,10 +1,9 @@
 package io.github.kfaryarok.android.firstlaunch.pages;
 
-import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.NumberPicker;
 
 import butterknife.BindView;
@@ -28,17 +27,20 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
  */
 public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
-    @BindView(R.id.include_class_selector)
+    @BindView(R.id.include_firstlaunch_class_selector)
     public View selectorInclude;
 
     @BindView(R.id.np_dialog_class_num)
     public NumberPicker numPicker;
 
-    @BindView(R.id.cb_firstlaunch_show_all_updates)
+    @BindView(R.id.cb_firstlaunch_page_class_showallupdates)
     public CheckBox showAllCheckBox;
 
-    @BindView(R.id.btn_firstlaunch_page1_next)
-    public ImageButton nextPageButton;
+    @BindView(R.id.btn_firstlaunch_page_class_previous)
+    public Button previousPageButton;
+
+    @BindView(R.id.btn_firstlaunch_page_class_next)
+    public Button nextPageButton;
 
     @BindView(R.id.gp_dialog_grade)
     public GradePicker gradePicker;
@@ -47,7 +49,7 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
     protected View onAbstractCreateView(View view) {
         ButterKnife.bind(this, view);
 
-        flipNavigationButtons(null, nextPageButton);
+        flipNavigationButtons(previousPageButton, nextPageButton);
 
         numPicker.setMinValue(1);
         numPicker.setMaxValue(11);
@@ -88,6 +90,10 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
                     .apply();
         }));
 
+        previousPageButton.setOnClickListener((v) -> {
+            FirstLaunchActivity act = (FirstLaunchActivity) getActivity();
+            act.viewPager.setCurrentItem(act.viewPager.getCurrentItem() - 1);
+        });
         nextPageButton.setOnClickListener((v) -> {
             FirstLaunchActivity act = (FirstLaunchActivity) getActivity();
             act.viewPager.setCurrentItem(act.viewPager.getCurrentItem() + 1);
@@ -96,15 +102,10 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
         return view;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @LayoutRes
     @Override
     protected int getLayout() {
-        return R.layout.fragment_first_launch_page1_class;
+        return R.layout.fragment_first_launch_page_class;
     }
 
 }
