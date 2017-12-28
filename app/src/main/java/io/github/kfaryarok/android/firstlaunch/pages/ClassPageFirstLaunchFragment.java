@@ -34,27 +34,11 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
     @BindView(R.id.np_dialog_class_num)
     public NumberPicker numPicker;
 
-//    @BindView(R.id.rg_dialog_grade)
-//    public RadioGroup gradePicker;
-
     @BindView(R.id.cb_firstlaunch_show_all_updates)
     public CheckBox showAllCheckBox;
 
     @BindView(R.id.btn_firstlaunch_page1_next)
     public ImageButton nextPageButton;
-
-//    @BindView(R.id.rb_dialog_grade_g)
-//    public RadioButton gGradeRadioButton;
-//    @BindView(R.id.rb_dialog_grade_h)
-//    public RadioButton hGradeRadioButton;
-//    @BindView(R.id.rb_dialog_grade_i)
-//    public RadioButton iGradeRadioButton;
-//    @BindView(R.id.rb_dialog_grade_j)
-//    public RadioButton jGradeRadioButton;
-//    @BindView(R.id.rb_dialog_grade_k)
-//    public RadioButton kGradeRadioButton;
-//    @BindView(R.id.rb_dialog_grade_l)
-//    public RadioButton lGradeRadioButton;
 
     @BindView(R.id.gp_dialog_grade)
     public GradePicker gradePicker;
@@ -63,13 +47,12 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
     protected View onAbstractCreateView(View view) {
         ButterKnife.bind(this, view);
 
+        flipNavigationButtons(null, nextPageButton);
+
         numPicker.setMinValue(1);
         numPicker.setMaxValue(11);
         numPicker.setWrapSelectorWheel(false);
         numPicker.setSelected(true);
-
-        // only enable it after user puts in data
-        // nextPageButton.setEnabled(false);
 
         LayoutUtil.setDirection(selectorInclude, LayoutUtil.RTL);
         LayoutUtil.setDirection(showAllCheckBox, LayoutUtil.RTL);
@@ -86,21 +69,6 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
                     .putString(getString(R.string.pref_class_string), newGrade + classNum)
                     .apply();
         });
-//        gradePicker.setOnCheckedChangeListener(((group, checkedId) -> {
-//            String currentClass = PreferenceUtil.getActualStoredClassPreference(getContext());
-//            int classNum = ClassUtil.parseHebrewClassNumber(currentClass);
-//
-//            String newGrade = ClassPreferenceDialogFragmentCompat.convertGradeRadioButtonResToString(getContext(), checkedId);
-//
-//            PreferenceUtil.prefs(getContext()).edit()
-//                    .putString(getString(R.string.pref_class_string), newGrade + classNum)
-//                    .apply();
-//
-//            // a grade is selected and is assumed can't be deselected (radio buttons)
-//            // just enable going to the next page permanently
-//            // nextPageButton.setEnabled(true);
-//            allowNextPage = true;
-//        }));
 
         numPicker.setOnValueChangedListener(((picker, oldVal, newVal) -> {
             String currentClass = PreferenceUtil.getActualStoredClassPreference(getContext());
@@ -112,12 +80,6 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
         }));
 
         showAllCheckBox.setOnCheckedChangeListener(((buttonView, isChecked) -> {
-//            gGradeRadioButton.setEnabled(!isChecked);
-//            hGradeRadioButton.setEnabled(!isChecked);
-//            iGradeRadioButton.setEnabled(!isChecked);
-//            jGradeRadioButton.setEnabled(!isChecked);
-//            kGradeRadioButton.setEnabled(!isChecked);
-//            lGradeRadioButton.setEnabled(!isChecked);
             gradePicker.setEnabled(!isChecked);
             numPicker.setEnabled(!isChecked);
 
