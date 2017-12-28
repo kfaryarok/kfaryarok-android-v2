@@ -26,6 +26,8 @@ public class LastPageFirstLaunchFragment extends FirstLaunchPageFragment {
     protected View onAbstractCreateView(View view) {
         ButterKnife.bind(this, view);
 
+        flipNavigationButtons(previousPageButton, null);
+
         finishButton.setOnClickListener(v -> {
             // finished setup, exit and remember first launch wizard ran
             PreferenceUtil.prefs(getContext()).edit()

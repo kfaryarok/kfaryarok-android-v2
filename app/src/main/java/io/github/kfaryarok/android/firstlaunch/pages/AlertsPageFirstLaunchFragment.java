@@ -49,6 +49,8 @@ public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
     protected View onAbstractCreateView(View view) {
         ButterKnife.bind(this, view);
 
+        flipNavigationButtons(previousPageButton, nextPageButton);
+
         LayoutUtil.setDirection(toggleCheckBox, LayoutUtil.RTL);
         LayoutUtil.setDirection(timePickerButton, LayoutUtil.RTL);
         LayoutUtil.setDirection(globalToggleCheckBox, LayoutUtil.RTL);
