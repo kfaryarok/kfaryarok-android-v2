@@ -1,14 +1,15 @@
 package io.github.kfaryarok.android.firstlaunch;
 
 import android.content.Context;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+
+import com.duolingo.open.rtlviewpager.RtlViewPager;
 
 /**
  * @author tbsc on 20/11/2017
  */
-public class FirstLaunchViewPager extends ViewPager {
+public class FirstLaunchViewPager extends RtlViewPager {
 
     public FirstLaunchViewPager(Context context) {
         super(context);
