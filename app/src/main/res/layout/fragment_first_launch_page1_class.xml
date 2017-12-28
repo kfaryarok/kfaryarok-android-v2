@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/include_class_selector"
-        layout="@layout/dialog_class_selector"
+        layout="@layout/dialog_class_selector_allpickers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
