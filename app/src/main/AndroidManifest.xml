@@ -39,7 +39,8 @@
         </activity>
         <activity
             android:name=".firstlaunch.FirstLaunchActivity"
-            android:label="@string/act_firstlaunch">
+            android:label="@string/act_firstlaunch"
+            android:screenOrientation="sensorPortrait">
         </activity>
         <receiver
             android:name=".alerts.BootReceiver"

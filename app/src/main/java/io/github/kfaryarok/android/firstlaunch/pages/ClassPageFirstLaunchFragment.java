@@ -36,9 +36,6 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
     @BindView(R.id.cb_firstlaunch_page_class_showallupdates)
     public CheckBox showAllCheckBox;
 
-    @BindView(R.id.btn_firstlaunch_page_class_previous)
-    public Button previousPageButton;
-
     @BindView(R.id.btn_firstlaunch_page_class_next)
     public Button nextPageButton;
 
@@ -49,7 +46,7 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
     protected View onAbstractCreateView(View view) {
         ButterKnife.bind(this, view);
 
-        flipNavigationButtons(previousPageButton, nextPageButton);
+        flipNavigationButtons(null, nextPageButton);
 
         numPicker.setMinValue(1);
         numPicker.setMaxValue(11);
@@ -90,13 +87,29 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
                     .apply();
         }));
 
-        previousPageButton.setOnClickListener((v) -> {
-            FirstLaunchActivity act = (FirstLaunchActivity) getActivity();
-            act.viewPager.setCurrentItem(act.viewPager.getCurrentItem() - 1);
-        });
         nextPageButton.setOnClickListener((v) -> {
             FirstLaunchActivity act = (FirstLaunchActivity) getActivity();
             act.viewPager.setCurrentItem(act.viewPager.getCurrentItem() + 1);
+
+            // seems very complex at first and a bit unnecessary, but I'll explain why it's there
+            // firstly, it sees if there's a class stored in preferences
+            // then it checks if maybe the user set it to show all updates
+            // then it checks if the selected grade is 7 (ז)
+            // and lastly it checks if the selected class number is 1
+            // this is needed because the user might be from ז1 and therefore won't change the class
+            // the problem is that then the class never gets saved to the preferences
+            // this checks if that happens, and if it does, it saves to prefs
+            if (PreferenceUtil.getActualStoredClassPreference(getContext()).equals(getString(R.string.pref_class_string_def))
+                    && !PreferenceUtil.getShowAllUpdatesPreference(getContext())
+                    && gradePicker.getValue() == ClassPreferenceDialogFragmentCompat.convertGradeStringToGradePickerValue("ז")
+                    && numPicker.getValue() == 1) {
+                PreferenceUtil.prefs(getContext()).edit()
+                        .putString(getString(R.string.pref_class_string),
+                                ClassPreferenceDialogFragmentCompat
+                                        .convertGradePickerValueToString(getContext(), gradePicker.getValue())
+                                        + numPicker.getValue())
+                        .apply();
+            }
         });
 
         return view;

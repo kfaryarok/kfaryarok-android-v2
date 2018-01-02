@@ -377,7 +377,8 @@ public class ClassUtil {
     /**
      * Tries to get the (current) number of classes in the given grade.
      * I.e.: In grade H there are 9 classes (H1-9), so it'll return 9.
-     * TODO: Outdated! For now on it'll just be 11 for all grades but try to figure out something
+     * NOTREALLY_TODO: Outdated! For now on it'll just be 11 for all grades but try to figure out something
+     *                 Update: I decided I won't try to match it to current maximum.
      *
      * Not creating a unit test for this one, as there isn't really anything to test here
      * @param grade Hebrew grade

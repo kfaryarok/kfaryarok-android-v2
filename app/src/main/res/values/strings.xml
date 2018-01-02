@@ -18,12 +18,12 @@
     <!-- View strings -->
     <string name="btn_devmode_easteregg" translatable="false">dev off</string>
     <string name="cb_firstlaunch_alerts">הפעל התראות</string>
-    <string name="btn_firstlaunch_timepicker">שעת התראה</string>
+    <string name="btn_firstlaunch_timepicker">שעת התראה:</string>
     <string name="cb_firstlaunch_globalalerts">קבל התראות על הודעות מערכת</string>
     <string name="cb_dialog_class_showall">הצג הכל</string>
-    <string name="tv_firstlaunch_page1_class_title">בחר כיתה</string>
-    <string name="tv_firstlaunch_page2_alerts_title">הגדר התראות</string>
-    <string name="btn_firstlaunch_page3_finish">סיום</string>
+    <string name="tv_firstlaunch_page_class_title">בחר כיתה</string>
+    <string name="tv_firstlaunch_page_alerts_title">הגדר התראות</string>
+    <string name="btn_firstlaunch_finish">סיום</string>
     <string name="tv_firstlaunch_page2_alerts_toggle">הפעל התראות</string>
     <string name="tv_main_warning_outdated">ייתכן שהמידע לא מעודכן!</string>
     <string name="tv_main_info">עודכן לאחרונה: טוען…</string>
@@ -31,6 +31,10 @@
     <string name="btn_firstlaunch_to_page_alerts">התראות</string>
     <string name="btn_firstlaunch_to_page_class">כיתה</string>
     <string name="btn_firstlaunch_to_page_last">סיום</string>
+    <string name="btn_firstlaunch_next_page">הבא</string>
+    <string name="btn_firstlaunch_previous_page">הקודם</string>
+    <string name="tv_firstlaunch_page_alerts_currentsettime_default">HH:mm</string>
+    <string name="tvbtn_firstlaunch_page_alerts_change">עדכן</string>
 
     <!-- Used when some unrecoverable error during update loading occurred,
      and user needs to be notified of it -->
@@ -61,6 +65,7 @@
     <string name="settings_advancedcategory_reset">אפס הגדרות</string>
     <string name="settings_advancedcategory_reset_summary">מיד לאחר לחיצה על הכפתור, כל ההגדרות ימחקו!</string>
     <string name="settings_class">כיתה</string>
+    <string name="settings_alerts_time">שעת התראה</string>
     <string name="settings_show_all_updates">הצג הודעות של כל הכיתות</string>
 
     <!-- Preference categories -->
@@ -105,8 +110,16 @@
     <string name="grade_k">יא</string>
     <string name="grade_l">יב</string>
 
+    <string name="grade_g_formatted">ז\'</string>
+    <string name="grade_h_formatted">ח\'</string>
+    <string name="grade_i_formatted">ט\'</string>
+    <string name="grade_j_formatted">י\'</string>
+    <string name="grade_k_formatted">י\"א</string>
+    <string name="grade_l_formatted">י\"ב</string>
+
     <!-- Content description strings -->
     <string name="contentdesc_firstlaunch_page3_finish">finish setup</string>
     <string name="contentdesc_nextpage">next page</string>
     <string name="contentdesc_prevpage">previous page</string>
+    <string name="contentdesc_firstlaunch_logo">Logo of the kfar</string>
 </resources>

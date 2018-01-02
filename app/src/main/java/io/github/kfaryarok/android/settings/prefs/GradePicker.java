@@ -8,10 +8,11 @@ import android.widget.NumberPicker;
 
 import java.lang.reflect.Field;
 
+import io.github.kfaryarok.android.R;
+
 /**
  * Extension of NumberPicker for picking grades.
  * Has 6 options, each options representing a grade.
- * TODO: When an activity shows with this view, it's selected and it causes the selected value to not show. Fix it
  *
  * @author tbsc on 26/12/2017
  */
@@ -19,11 +20,30 @@ public class GradePicker extends NumberPicker {
 
     public GradePicker(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setFormatter(value -> ClassPreferenceDialogFragmentCompat.convertGradePickerValueToString(getContext(), value));
+        setFormatter(value -> convertGradePickerValueToFormattedString(getContext(), value));
         setMinValue(7);
         setMaxValue(12);
         setWrapSelectorWheel(false);
         setSelected(false);
+    }
+
+    public static String convertGradePickerValueToFormattedString(Context ctx, int gradeNum) {
+        switch (gradeNum) {
+            case 7:
+                return ctx.getString(R.string.grade_g_formatted);
+            case 8:
+                return ctx.getString(R.string.grade_h_formatted);
+            case 9:
+                return ctx.getString(R.string.grade_i_formatted);
+            case 10:
+                return ctx.getString(R.string.grade_j_formatted);
+            case 11:
+                return ctx.getString(R.string.grade_k_formatted);
+            case 12:
+                return ctx.getString(R.string.grade_l_formatted);
+            default:
+                return null;
+        }
     }
 
     /**
@@ -40,20 +60,6 @@ public class GradePicker extends NumberPicker {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        // doesn't work
-//        try {
-//            Method method = picker.getClass().getDeclaredMethod("changeValueByOne", boolean.class);
-//            method.setAccessible(true);
-//            method.invoke(picker, true);
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        } catch (IllegalArgumentException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e) {
-//            e.printStackTrace();
-//        }
     }
 
 }

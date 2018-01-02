@@ -33,8 +33,6 @@ public class FirstLaunchActivity extends FragmentActivity {
 
         ButterKnife.bind(this);
 
-        // LayoutUtil.setDirection(this, LayoutUtil.LTR);
-
         adapterPager = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapterPager);
     }

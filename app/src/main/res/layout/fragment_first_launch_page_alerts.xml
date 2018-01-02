@@ -6,6 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clayout_firstlaunch_page_alerts_titlesection"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_firstlaunch_page_class_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/tv_firstlaunch_page_alerts_title"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.8"/>
+    </android.support.constraint.ConstraintLayout>
+
     <Button
         android:id="@+id/btn_firstlaunch_page_alerts_next"
         android:layout_width="wrap_content"
@@ -13,20 +41,17 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/contentdesc_nextpage"
         android:drawableEnd="@drawable/ic_navigate_next_black_24dp"
         android:drawableRight="@drawable/ic_navigate_next_black_24dp"
         android:padding="6dp"
-        android:text="@string/btn_firstlaunch_to_page_last"
+        android:text="@string/btn_firstlaunch_next_page"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.976"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"/>
+        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <Button
         android:id="@+id/btn_firstlaunch_page_alerts_previous"
@@ -41,89 +66,146 @@
         android:drawableLeft="@drawable/ic_navigate_before_black_24dp"
         android:drawableStart="@drawable/ic_navigate_before_black_24dp"
         android:padding="6dp"
-        android:text="@string/btn_firstlaunch_to_page_class"
+        android:text="@string/btn_firstlaunch_previous_page"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.03"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.98"/>
+        app:layout_constraintStart_toStartOf="parent"/>
 
-    <TextView
-        android:id="@+id/tv_firstlaunch_page_alerts_title"
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_firstlaunch_page_alerts_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/tv_firstlaunch_page2_alerts_title"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.06999999"/>
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85"/>
 
-    <CheckBox
-        android:id="@+id/cb_firstlaunch_page_alerts_toggle"
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_firstlaunch_page_alerts_left"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/tv_firstlaunch_page2_alerts_toggle"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.35000002"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="8dp"/>
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15"/>
 
-    <CheckBox
-        android:id="@+id/cb_firstlaunch_page_alerts_global"
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_firstlaunch_page_alerts_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/cb_firstlaunch_globalalerts"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_firstlaunch_page_alerts_timeselected"
-        app:layout_constraintVertical_bias="0.0"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="8dp"/>
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25"/>
 
-    <Button
-        android:id="@+id/btn_firstlaunch_page_alerts_timepicker"
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_firstlaunch_page_alerts_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/btn_firstlaunch_timepicker"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cb_firstlaunch_page_alerts_toggle" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85"/>
 
-    <TextView
-        android:id="@+id/tv_firstlaunch_page_alerts_timeselected"
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clayout_firstlaunch_page_alerts_content"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="@string/debug_string"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_firstlaunch_page_alerts_timepicker" />
+        app:layout_constraintBottom_toTopOf="@+id/guideline_firstlaunch_page_alerts_bottom"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/guideline_firstlaunch_page_alerts_left"
+        app:layout_constraintRight_toLeftOf="@+id/guideline_firstlaunch_page_alerts_right"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_firstlaunch_page_alerts_top">
+
+        <CheckBox
+            android:id="@+id/cb_firstlaunch_page_alerts_toggle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/cb_firstlaunch_alerts"
+            android:textAlignment="viewEnd"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_firstlaunch_page_alerts_titletime"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"/>
+
+        <TextView
+            android:id="@+id/tv_firstlaunch_page_alerts_timeselected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/tv_firstlaunch_page_alerts_currentsettime_default"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_firstlaunch_page_alerts_titletime"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_firstlaunch_page_alerts_titletime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/btn_firstlaunch_timepicker"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_firstlaunch_page_alerts_timeselected"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_firstlaunch_page_alerts_timeselected"/>
+
+        <TextView
+            android:id="@+id/tvbtn_firstlaunch_page_alerts_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingBottom="12dp"
+            android:paddingStart="20dp"
+            android:paddingTop="12dp"
+            android:text="@string/tvbtn_firstlaunch_page_alerts_change"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_firstlaunch_page_alerts_timeselected"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/tv_firstlaunch_page_alerts_timeselected"
+            app:layout_constraintTop_toTopOf="@+id/tv_firstlaunch_page_alerts_timeselected"/>
+
+        <CheckBox
+            android:id="@+id/cb_firstlaunch_page_alerts_global"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/cb_firstlaunch_globalalerts"
+            android:textAlignment="viewEnd"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_firstlaunch_page_alerts_titletime"
+            app:layout_constraintVertical_bias="0.0"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+
 </android.support.constraint.ConstraintLayout>
