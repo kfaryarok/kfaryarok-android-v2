@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-<!--    <EditTextPreference
-        android:key="@string/pref_class_string"
-        android:selectAllOnFocus="true"
-        android:title="@string/settings_class" />-->
-
     <io.github.kfaryarok.android.settings.prefs.ClassPreference
         android:key="@string/pref_class_string"
         android:title="@string/settings_class" />
@@ -25,7 +20,7 @@
 
         <io.github.kfaryarok.android.settings.prefs.TimePreference
             android:key="@string/pref_alerts_time_string"
-            android:title="@string/btn_firstlaunch_timepicker"
+            android:title="@string/settings_alerts_time"
             android:defaultValue="@string/pref_alerts_time_string_def"
             android:summary="@string/debug_string" />
 

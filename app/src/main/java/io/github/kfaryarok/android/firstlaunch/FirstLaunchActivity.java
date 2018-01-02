@@ -15,6 +15,7 @@ import io.github.kfaryarok.android.R;
 import io.github.kfaryarok.android.firstlaunch.pages.AlertsPageFirstLaunchFragment;
 import io.github.kfaryarok.android.firstlaunch.pages.ClassPageFirstLaunchFragment;
 import io.github.kfaryarok.android.firstlaunch.pages.LastPageFirstLaunchFragment;
+import io.github.kfaryarok.android.firstlaunch.pages.WelcomePageFirstLaunchFragment;
 
 public class FirstLaunchActivity extends FragmentActivity {
 
@@ -31,8 +32,6 @@ public class FirstLaunchActivity extends FragmentActivity {
         setContentView(R.layout.activity_first_launch);
 
         ButterKnife.bind(this);
-
-        // LayoutUtil.setDirection(this, LayoutUtil.LTR);
 
         adapterPager = new PagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapterPager);
@@ -55,6 +54,7 @@ public class FirstLaunchActivity extends FragmentActivity {
     private class PagerAdapter extends FragmentStatePagerAdapter {
 
         FirstLaunchPageFragment[] pages = {
+                new WelcomePageFirstLaunchFragment(),
                 new ClassPageFirstLaunchFragment(),
                 new AlertsPageFirstLaunchFragment(),
                 new LastPageFirstLaunchFragment()
@@ -71,7 +71,7 @@ public class FirstLaunchActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return pages.length;
         }
 
     }

@@ -2,10 +2,11 @@ package io.github.kfaryarok.android.firstlaunch.pages;
 
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -27,23 +28,29 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
  */
 public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
-    @BindView(R.id.cb_firstlaunch_page2_alerts_toggle)
+    @BindView(R.id.cb_firstlaunch_page_alerts_toggle)
     public CheckBox toggleCheckBox;
 
-    @BindView(R.id.btn_firstlaunch_page2_alerts_timepicker)
-    public Button timePickerButton;
+    @BindView(R.id.tvbtn_firstlaunch_page_alerts_change)
+    public TextView timePickerButtonTextView;
 
-    @BindView(R.id.tv_firstlaunch_page2_alerts_timeselected)
+    @BindView(R.id.tv_firstlaunch_page_alerts_timeselected)
     public TextView selectedTimeTextView;
 
-    @BindView(R.id.cb_firstlaunch_page2_alerts_global)
+    @BindView(R.id.tv_firstlaunch_page_alerts_titletime)
+    public TextView timeTitleTextView;
+
+    @BindView(R.id.cb_firstlaunch_page_alerts_global)
     public CheckBox globalToggleCheckBox;
 
-    @BindView(R.id.btn_firstlaunch_page2_previous)
-    public ImageButton previousPageButton;
+    @BindView(R.id.btn_firstlaunch_page_alerts_previous)
+    public Button previousPageButton;
 
-    @BindView(R.id.btn_firstlaunch_page2_next)
-    public ImageButton nextPageButton;
+    @BindView(R.id.btn_firstlaunch_page_alerts_next)
+    public Button nextPageButton;
+
+    @BindView(R.id.clayout_firstlaunch_page_alerts_content)
+    public ConstraintLayout contentConstraintLayout;
 
     @Override
     protected View onAbstractCreateView(View view) {
@@ -51,16 +58,28 @@ public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
         flipNavigationButtons(previousPageButton, nextPageButton);
 
-        LayoutUtil.setDirection(toggleCheckBox, LayoutUtil.RTL);
-        LayoutUtil.setDirection(timePickerButton, LayoutUtil.RTL);
-        LayoutUtil.setDirection(globalToggleCheckBox, LayoutUtil.RTL);
+        LayoutUtil.setDirection(contentConstraintLayout, LayoutUtil.RTL);
+        LayoutUtil.setDirection(toggleCheckBox, LayoutUtil.LTR);
+        LayoutUtil.setDirection(globalToggleCheckBox, LayoutUtil.LTR);
 
         toggleCheckBox.setChecked(true);
         globalToggleCheckBox.setChecked(true);
 
         toggleCheckBox.setOnCheckedChangeListener((buttonView, isChecked) ->  {
-            timePickerButton.setEnabled(isChecked);
             globalToggleCheckBox.setEnabled(isChecked);
+            timePickerButtonTextView.setClickable(isChecked);
+            if (!isChecked) {
+                int disabledColor = ContextCompat.getColor(getContext(), android.R.color.darker_gray);
+                selectedTimeTextView.setTextColor(disabledColor);
+                timeTitleTextView.setTextColor(disabledColor);
+                timePickerButtonTextView.setTextColor(disabledColor);
+            } else {
+                int buttonColor = ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark);
+                int textColor = ContextCompat.getColor(getContext(), android.R.color.primary_text_light);
+                selectedTimeTextView.setTextColor(textColor);
+                timeTitleTextView.setTextColor(textColor);
+                timePickerButtonTextView.setTextColor(buttonColor);
+            }
 
             PreferenceUtil.prefs(getContext()).edit()
                     .putBoolean(getString(R.string.pref_alerts_enabled_bool), isChecked)
@@ -69,7 +88,7 @@ public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
             AlertHelper.toggleAlert(getContext(), isChecked);
         });
 
-        timePickerButton.setOnClickListener(button -> {
+        timePickerButtonTextView.setOnClickListener(button -> {
             TimePickerDialog dialog = new TimePickerDialog(getContext(), (timePicker, hourOfDay, minute) -> {
                 SharedPreferences prefs = PreferenceUtil.prefs(getContext());
                 String time = TimePreference.timeToString(hourOfDay, minute);
@@ -109,7 +128,7 @@ public class AlertsPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
     @Override
     protected int getLayout() {
-        return R.layout.fragment_first_launch_page2_alerts;
+        return R.layout.fragment_first_launch_page_alerts;
     }
 
 }

@@ -38,7 +38,7 @@ public class ClassPreference extends DialogPreference {
     public ClassPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        setDialogLayoutResource(R.layout.dialog_class_selector_allpickers);
+        setDialogLayoutResource(R.layout.dialog_class_selector);
         setDialogTitle(R.string.dialog_pref_class_title);
         setFragment(ClassPreferenceDialogFragmentCompat.class.getSimpleName());
         setDialogIcon(null);

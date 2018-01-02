@@ -19,9 +19,7 @@ package io.github.kfaryarok.android.settings.prefs;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.DialogPreference;
@@ -30,7 +28,6 @@ import android.support.v7.preference.PreferenceDialogFragmentCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import io.github.kfaryarok.android.R;
@@ -39,16 +36,13 @@ import io.github.kfaryarok.android.util.LayoutUtil;
 
 /**
  * Fragment for the TimePreference to show when clicked, and to have control of it.
- * TODO: Figure out a way to have the grade picker look like the number picker
  *
  * @author tbsc on 10/03/2017 (copied from v1)
  */
 public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmentCompat implements DialogPreference.TargetFragment {
 
     GradePicker gradePicker;
-//    RadioGroup gradeRadioGroup;
     NumberPicker classNumPicker;
-    // CheckBox showAllCheckBox;
     LinearLayout selectorLinearLayout;
 
     private Toast toast;
@@ -73,19 +67,9 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
         super.onBindDialogView(v);
 
         gradePicker = v.findViewById(R.id.gp_dialog_grade);
-//        gradeRadioGroup = v.findViewById(R.id.rg_dialog_grade);
         classNumPicker = v.findViewById(R.id.np_dialog_class_num);
-        // showAllCheckBox = v.findViewById(R.id.cb_dialog_class_showall);
         selectorLinearLayout = v.findViewById(R.id.ll_dialog_class_selectors);
         final ClassPreference pref = (ClassPreference) getPreference();
-
-//        // set options and set current selected entries
-//        gradeRadioGroup.check(convertGradeStringToRadioButtonRes(pref.grade));
-//        // used to change the number picker's max value based on the selected grade
-//        gradeRadioGroup.setOnCheckedChangeListener(
-//                (group, checkedId) ->
-//                        classNumPicker.setMaxValue(ClassUtil.getClassesInHebrewGrade(convertGradeRadioButtonResToString(getContext(), checkedId)))
-//        );
 
         GradePicker.fixFormatting(gradePicker);
 
@@ -98,17 +82,12 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
         classNumPicker.setMaxValue(ClassUtil.getClassesInHebrewGrade(pref.grade));
         classNumPicker.setWrapSelectorWheel(false);
         classNumPicker.setValue(pref.classNum);
-
-        // allow selecting a class if not set to show all updates, regardless of class
-        // showAllCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> selectorLinearLayout.setClickable(!isChecked));
     }
 
     @Override
     public void onDialogClosed(boolean positiveResult) {
         if (positiveResult) {
             ClassPreference pref = (ClassPreference) getPreference();
-//            @IdRes int gradeRes = gradeRadioGroup.getCheckedRadioButtonId();
-//            String grade = convertGradeRadioButtonResToString(getContext(), gradeRes);
             String grade = convertGradePickerValueToString(getContext(), gradePicker.getValue());
             int classNum = classNumPicker.getValue();
             pref.setClass(grade, classNum);
@@ -119,86 +98,6 @@ public class ClassPreferenceDialogFragmentCompat extends PreferenceDialogFragmen
     @Override
     public Preference findPreference(CharSequence charSequence) {
         return getPreference();
-    }
-
-    /**
-     * Takes the ID resource, checks if it matches any of the resources noted below, and returns
-     * an equivalent as a string, based on matching string resources.
-     * Valid resources:
-     *   - {@link io.github.kfaryarok.android.R.id#rb_dialog_grade_g}
-     *   - {@link io.github.kfaryarok.android.R.id#rb_dialog_grade_h}
-     *   - {@link io.github.kfaryarok.android.R.id#rb_dialog_grade_i}
-     *   - {@link io.github.kfaryarok.android.R.id#rb_dialog_grade_j}
-     *   - {@link io.github.kfaryarok.android.R.id#rb_dialog_grade_k}
-     *   - {@link io.github.kfaryarok.android.R.id#rb_dialog_grade_l}
-     * Matching strings (in matching order to valid resources):
-     *   - {@link io.github.kfaryarok.android.R.string#grade_g}
-     *   - {@link io.github.kfaryarok.android.R.string#grade_h}
-     *   - {@link io.github.kfaryarok.android.R.string#grade_i}
-     *   - {@link io.github.kfaryarok.android.R.string#grade_j}
-     *   - {@link io.github.kfaryarok.android.R.string#grade_k}
-     *   - {@link io.github.kfaryarok.android.R.string#grade_l}
-     * Example:
-     * Input: {@link io.github.kfaryarok.android.R.id#rb_dialog_grade_h}
-     * Output: VALUE of {@link io.github.kfaryarok.android.R.string#grade_h}
-     *         which is ח
-     *
-     * @param ctx Used to get string grade strings
-     * @param gradeRes ID resource to one of those noted above
-     * @return Hebrew grade string, or null if not any of the resources noted above
-     */
-    @Nullable
-    public static String convertGradeRadioButtonResToString(Context ctx, @IdRes int gradeRes) {
-        switch (gradeRes) {
-            case R.id.rb_dialog_grade_g:
-                return ctx.getString(R.string.grade_g);
-            case R.id.rb_dialog_grade_h:
-                return ctx.getString(R.string.grade_h);
-            case R.id.rb_dialog_grade_i:
-                return ctx.getString(R.string.grade_i);
-            case R.id.rb_dialog_grade_j:
-                return ctx.getString(R.string.grade_j);
-            case R.id.rb_dialog_grade_k:
-                return ctx.getString(R.string.grade_k);
-            case R.id.rb_dialog_grade_l:
-                return ctx.getString(R.string.grade_l);
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * Takes the grade string, checks to see if it's valid using {@link ClassUtil#isValidHebrewGrade(String)},
-     * matches it with a radio button resource ID and returns it.
-     * @param grade Hebrew grade
-     * @return Radio button resource ID
-     */
-    @IdRes
-    public static int convertGradeStringToRadioButtonRes(String grade) {
-        if (grade == null || grade.length() == 0) {
-            return -1;
-        }
-
-        if (!ClassUtil.isValidHebrewGrade(grade)) {
-            return -1;
-        }
-
-        switch (grade) {
-            case "ז":
-                return R.id.rb_dialog_grade_g;
-            case "ח":
-                return R.id.rb_dialog_grade_h;
-            case "ט":
-                return R.id.rb_dialog_grade_i;
-            case "י":
-                return R.id.rb_dialog_grade_j;
-            case "יא":
-                return R.id.rb_dialog_grade_k;
-            case "יב":
-                return R.id.rb_dialog_grade_l;
-            default:
-                return -1;
-        }
     }
 
     public static int convertGradeStringToGradePickerValue(String grade) {

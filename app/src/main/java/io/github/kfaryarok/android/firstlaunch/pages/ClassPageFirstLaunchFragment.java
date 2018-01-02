@@ -1,10 +1,9 @@
 package io.github.kfaryarok.android.firstlaunch.pages;
 
-import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.NumberPicker;
 
 import butterknife.BindView;
@@ -28,17 +27,17 @@ import io.github.kfaryarok.android.util.PreferenceUtil;
  */
 public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
 
-    @BindView(R.id.include_class_selector)
+    @BindView(R.id.include_firstlaunch_class_selector)
     public View selectorInclude;
 
     @BindView(R.id.np_dialog_class_num)
     public NumberPicker numPicker;
 
-    @BindView(R.id.cb_firstlaunch_show_all_updates)
+    @BindView(R.id.cb_firstlaunch_page_class_showallupdates)
     public CheckBox showAllCheckBox;
 
-    @BindView(R.id.btn_firstlaunch_page1_next)
-    public ImageButton nextPageButton;
+    @BindView(R.id.btn_firstlaunch_page_class_next)
+    public Button nextPageButton;
 
     @BindView(R.id.gp_dialog_grade)
     public GradePicker gradePicker;
@@ -91,20 +90,35 @@ public class ClassPageFirstLaunchFragment extends FirstLaunchPageFragment {
         nextPageButton.setOnClickListener((v) -> {
             FirstLaunchActivity act = (FirstLaunchActivity) getActivity();
             act.viewPager.setCurrentItem(act.viewPager.getCurrentItem() + 1);
+
+            // seems very complex at first and a bit unnecessary, but I'll explain why it's there
+            // firstly, it sees if there's a class stored in preferences
+            // then it checks if maybe the user set it to show all updates
+            // then it checks if the selected grade is 7 (ז)
+            // and lastly it checks if the selected class number is 1
+            // this is needed because the user might be from ז1 and therefore won't change the class
+            // the problem is that then the class never gets saved to the preferences
+            // this checks if that happens, and if it does, it saves to prefs
+            if (PreferenceUtil.getActualStoredClassPreference(getContext()).equals(getString(R.string.pref_class_string_def))
+                    && !PreferenceUtil.getShowAllUpdatesPreference(getContext())
+                    && gradePicker.getValue() == ClassPreferenceDialogFragmentCompat.convertGradeStringToGradePickerValue("ז")
+                    && numPicker.getValue() == 1) {
+                PreferenceUtil.prefs(getContext()).edit()
+                        .putString(getString(R.string.pref_class_string),
+                                ClassPreferenceDialogFragmentCompat
+                                        .convertGradePickerValueToString(getContext(), gradePicker.getValue())
+                                        + numPicker.getValue())
+                        .apply();
+            }
         });
 
         return view;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @LayoutRes
     @Override
     protected int getLayout() {
-        return R.layout.fragment_first_launch_page1_class;
+        return R.layout.fragment_first_launch_page_class;
     }
 
 }

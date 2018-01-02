@@ -71,11 +71,13 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
      */
     private int refreshCount = 0;
 
+    private BootReceiver bootReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // registering implicit receivers in API 26 can only be done programmatically
         // TODO: Figure this out completely
-        registerReceiver(new BootReceiver(), new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
+        registerReceiver(bootReceiver = new BootReceiver(), new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -101,8 +103,6 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
     private void firstLaunchCheck() {
         if (!PreferenceUtil.getLaunchedBeforePreference(this)) {
             // first launch
-//            Intent firstLaunchActivity = new Intent(this, SettingsActivity.class).putExtra(SettingsFragment.FIRST_LAUNCH_INTENT, true);
-//            startActivity(firstLaunchActivity);
             Intent firstLaunchActivity = new Intent(this, FirstLaunchActivity.class);
             startActivity(firstLaunchActivity);
         }
@@ -156,6 +156,15 @@ public class MainActivity extends AppCompatActivity implements UpdateAdapter.Upd
         if (resumeFromFirstLaunch) {
             resumeFromFirstLaunch = false;
             recreate();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (bootReceiver != null) {
+            unregisterReceiver(bootReceiver);
+            bootReceiver = null;
         }
     }
 

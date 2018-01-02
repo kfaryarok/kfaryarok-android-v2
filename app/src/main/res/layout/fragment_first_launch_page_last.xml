@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/clayout_firstlaunch_page_welcome_background">
+    <!--android:background="#BDBDBD"> trying white background instead of gray-->
+
+    <Button
+        android:id="@+id/btn_firstlaunch_page_last_previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/contentdesc_prevpage"
+        android:drawableLeft="@drawable/ic_navigate_before_black_24dp"
+        android:drawableStart="@drawable/ic_navigate_before_black_24dp"
+        android:padding="6dp"
+        android:text="@string/btn_firstlaunch_previous_page"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.03"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clayout_firstlaunch_page_last_foreground"/>
+
+    <Button
+        android:id="@+id/btn_firstlaunch_page_last_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/contentdesc_nextpage"
+        android:drawableEnd="@drawable/ic_check_black_24dp"
+        android:drawableRight="@drawable/ic_check_black_24dp"
+        android:padding="6dp"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
+        android:text="@string/btn_firstlaunch_finish"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clayout_firstlaunch_page_last_foreground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimary"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_firstlaunch_page_last_finish"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/img_firstlaunch_page_welcome_logo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:elevation="4dp"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_firstlaunch_page_last_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_firstlaunch_page_last_right"
+            app:layout_constraintStart_toStartOf="@+id/guideline_firstlaunch_page_last_left"
+            app:layout_constraintTop_toTopOf="@+id/guideline_firstlaunch_page_last_top"
+            android:src="@drawable/kfar_logo_notext_white_big"
+            android:contentDescription="@string/contentdesc_firstlaunch_logo"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_firstlaunch_page_last_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_firstlaunch_page_last_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_firstlaunch_page_last_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.85"/>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline_firstlaunch_page_last_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15"/>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
